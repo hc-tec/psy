@@ -1,45 +1,58 @@
 <template>
   <div id="control-home">
-    <p class="member-info">会员信息</p>
-    <el-table
-      border
-      :data="memberInfo">
-      <el-table-column
-        v-for="(v,k) in memberInfo[0]"
-        :key="k"
-        :prop="k"
-        :label="fields[k]">
-
-      </el-table-column>
-    </el-table>
-    <p class="member-info">说明</p>
+    <div>
+      <two-column-table
+        class="member-info-table"
+        :tableData="memberInfo"
+      />
+      <p class="member-info">说明</p>
+    </div>
   </div>
 </template>
 
 <script>
 import { Table, TableColumn } from 'element-ui'
+import twoColumnTable from './two-column-table'
+import { ajaxGet } from '../element-wrapper'
+import { genericError } from '../func'
+import { MEMBER_INFO } from '../api'
 export default {
+
   components: {
-    "el-table": Table,
-    "el-table-column": TableColumn,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'two-column-table': twoColumnTable
   },
-  data(){
+  data () {
     return {
-      memberInfo:[
-        {
-          type: '申请人',
-          condition: '已注册，未提交申请',
-          code: '129358958923',
-          validTime: '2020-12-12~2021-12-12',
-          payCondition: '已付款',
+      memberInfo: {
+        head: '会员信息',
+        body: {
+          会员类型: '申请人',
+          状态: '已注册，未提交申请',
+          会员编码: '129358958923',
+          有效期: '2020-12-12~2021-12-12',
+          缴费情况: '已付款'
         }
-      ],
-      fields: {
-        type: '会员类型',
-        condition: '状态',
-        code: '会员编码',
-        validTime: '有效期',
-        payCondition: '缴费情况',
+      }
+    }
+  },
+  methods: {
+    initGetMemberInfo () {
+      ajaxGet(
+        MEMBER_INFO, {},
+        this.succGetMemberInfo, genericError
+      )
+    },
+    succGetMemberInfo (res) {
+      if (res.code === 200) {
+        const data = res.data[0]
+        this.memberInfo.body['会员类型'] = data.mbse_type
+        this.memberInfo.body['状态'] = data.mbse_status
+        this.memberInfo.body['会员编码'] = data.mbse_code
+        this.memberInfo.body['有效期'] = data.mbse_exp
+        this.memberInfo.body['缴费情况'] = ''
+        this.global.memberInfo = data
       }
     }
   }
@@ -47,11 +60,14 @@ export default {
 </script>
 
 <style>
-#control-home > * {
-  margin-bottom: 10px;
+#control-home > div:nth-child(1) {
+  background-color: #fff;
+  padding: 40px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  width: 600px;
+  margin: 0 auto;
 }
 .member-info {
-  margin-left: 20px;
   font-weight: bold;
   color: #409EFF;
   position: relative;

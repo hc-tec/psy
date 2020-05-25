@@ -5,14 +5,32 @@
     <div id="success-content">
       <div class="success-info">
         <i class="el-icon-success"></i>
-        <div>
+        <div v-if="!sighUpPage">
           <h3>恭喜您，已经注册成功！</h3><br />
           <span>注册手机号：</span>
           <span>{{ this.global.regisPhoneNumber }}</span>
         </div>
+
+        <div v-else>
+          <h3>恭喜您报名成功</h3>
+        </div>
+
       </div>
       <el-divider></el-divider>
-      <el-button type="primary" @click="login">登录</el-button>
+
+      <el-button
+        type="primary"
+        v-if="!sighUpPage"
+        @click="login">登录
+      </el-button>
+
+      <el-button
+        type="primary"
+        v-else
+        @click="backToActivityPage">
+        返回
+      </el-button>
+
     </div>
   </div>
 </template>
@@ -21,17 +39,21 @@
 import { Button, Divider } from 'element-ui'
 export default {
   components: {
-    "el-button": Button,
-    "el-divider": Divider,
+    'el-button': Button,
+    'el-divider': Divider
   },
-  data(){
+  data () {
     return {
       logo: this.global.logo,
+      sighUpPage: this.global.isSighUpPage
     }
   },
   methods: {
-    login(){
+    login () {
       this.$router.push('/login')
+    },
+    backToActivityPage () {
+      this.$router.push('/memberService/memberActivity/activityApply')
     }
   }
 

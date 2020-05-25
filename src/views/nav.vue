@@ -11,25 +11,35 @@
 <script>
 import user from '../components/user'
 import controlNav from '../components/nav'
+import { getCookie } from '../func'
+import { elmessage } from '../element-wrapper'
 export default {
   components: {
-    "control-nav": controlNav,
-    user,
+    'control-nav': controlNav,
+    user
   },
-  data(){
+  data () {
     return {
       transitionName: ''
     }
   },
   watch: {
-    $route(to, from) {
-      if(to.meta.index > from.meta.index){
-        this.transitionName = "slide-left";
+    $route (to, from) {
+      if (to.meta.index > from.meta.index) {
+        this.transitionName = 'slide-left'
       } else if (to.meta.index <= from.meta.index) {
-        this.transitionName = "slide-right";
+        this.transitionName = 'slide-right'
       }
-    },
+    }
   },
+  mounted () {
+    if (!getCookie('token')) {
+      elmessage('您未登录或登录已过期，即将跳转到登录界面', 'warning')
+      setTimeout(() => {
+        this.$router.push('/login')
+      }, 1000)
+    }
+  }
 }
 </script>
 

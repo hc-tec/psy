@@ -172,35 +172,35 @@
 import { Input, Select, Option, DatePicker, Upload, Button } from 'element-ui'
 export default {
   props: {
-    applyFormTitle: String,
+    applyFormTitle: String
   },
   components: {
-    "el-input": Input,
-    "el-select": Select,
-    "el-option": Option,
-    "el-date-picker": DatePicker,
-    "el-upload": Upload,
-    "el-button": Button,
+    'el-input': Input,
+    'el-select': Select,
+    'el-option': Option,
+    'el-date-picker': DatePicker,
+    'el-upload': Upload,
+    'el-button': Button
   },
-  data(){
+  data () {
     return {
       psyLevel: ['一级', '二级', '三级'],
-      technical: ["正高级", "副高级", "中级", "初级", '无'],
+      technical: ['正高级', '副高级', '中级', '初级', '无'],
       peoples: [
-              "汉族", "满族", "蒙古族", "回族", "藏族", "维吾尔族",
-              "苗族", "彝族", "壮族", "布依族", "侗族", "瑶族", "白族",
-              "土家族", "哈尼族", "哈萨克族", "傣族", "黎族", "傈僳族",
-              "佤族", "畲族", "高山族", "拉祜族", "水族", "东乡族", "纳西族",
-              "景颇族", "柯尔克孜族", "土族", "达斡尔族", "仫佬族", "羌族",
-              "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族", "普米族",
-              "朝鲜族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
-              "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族", "鄂伦春族",
-              "赫哲族", "门巴族", "珞巴族", "基诺族"
+        '汉族', '满族', '蒙古族', '回族', '藏族', '维吾尔族',
+        '苗族', '彝族', '壮族', '布依族', '侗族', '瑶族', '白族',
+        '土家族', '哈尼族', '哈萨克族', '傣族', '黎族', '傈僳族',
+        '佤族', '畲族', '高山族', '拉祜族', '水族', '东乡族', '纳西族',
+        '景颇族', '柯尔克孜族', '土族', '达斡尔族', '仫佬族', '羌族',
+        '布朗族', '撒拉族', '毛南族', '仡佬族', '锡伯族', '阿昌族', '普米族',
+        '朝鲜族', '塔吉克族', '怒族', '乌孜别克族', '俄罗斯族', '鄂温克族',
+        '德昂族', '保安族', '裕固族', '京族', '塔塔尔族', '独龙族', '鄂伦春族',
+        '赫哲族', '门巴族', '珞巴族', '基诺族'
       ],
       politication: [
-                      '中共党员', '中共预备党员', '共青团员',
-                     '民革党员', '民盟盟员', '民建会员', '民进会员',
-                     '农工党党员', '致公党党员', '九三学社社员', '台盟盟员', '无党派人士', '群众'
+        '中共党员', '中共预备党员', '共青团员',
+        '民革党员', '民盟盟员', '民建会员', '民进会员',
+        '农工党党员', '致公党党员', '九三学社社员', '台盟盟员', '无党派人士', '群众'
       ],
       applyFormData: {
         name: '',
@@ -228,28 +228,28 @@ export default {
         scientificResearchProject: [],
         academicPapers: [],
         approve: '',
-        vipCode: '',
+        vipCode: ''
       }
     }
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.applyFormData.avatar = URL.createObjectURL(file.raw);
+    handleAvatarSuccess (res, file) {
+      this.applyFormData.avatar = URL.createObjectURL(file.raw)
     },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
+    beforeAvatarUpload (file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+        this.$message.error('上传头像图片只能是 JPG 格式!')
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M;
+      return isJPG && isLt2M
     },
-    submitApplyForm(){
-      this.$emit("submitApplyForm", this.applyFormData)
+    submitApplyForm () {
+      this.$emit('submitApplyForm', this.applyFormData)
     }
   }
 }

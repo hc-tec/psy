@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    meta: {index:1},
+    meta: { index: 1 },
     components: {
       default: () => import(/* webpackChunkName: "login" */ '../views/login')
     }
@@ -15,15 +15,15 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    meta: {index:2},
+    meta: { index: 2 },
     components: {
       default: () => import(/* webpackChunkName: "register" */ '../views/register')
-    },
+    }
   },
   {
     path: '/success',
     name: 'regis-success',
-    meta: {index:3},
+    meta: { index: 3 },
     components: {
       default: () => import(/* webpackChunkName: "regis_success" */ '../components/regis_success')
     }
@@ -31,15 +31,15 @@ const routes = [
   {
     path: '/memberService',
     name: 'service',
-    meta: {index:4},
+    meta: { index: 4 },
     components: {
-     default: () => import(/* webpackChunkName: "service" */ '../views/nav')
+      default: () => import(/* webpackChunkName: "service" */ '../views/nav')
     },
     children: [
       {
         path: 'home',
         name: 'home',
-        meta: {index:11},
+        meta: { index: 11 },
         components: {
           default: () => import(/* webpackChunkName: "home" */ '../components/home')
         }
@@ -47,7 +47,7 @@ const routes = [
       {
         path: 'apply',
         name: 'apply',
-        meta: {index:5},
+        meta: { index: 5 },
         components: {
           default: () => import(/* webpackChunkName: "apply" */ '../components/apply')
         },
@@ -55,41 +55,41 @@ const routes = [
           {
             path: 'chooseApplyForm',
             name: 'applyBtn',
-            meta: {index:13},
+            meta: { index: 13 },
             components: {
-              default: () => import(/* webpackChunkName: "applyBtn" */ '../components/applyBtn'),
-            },
+              default: () => import(/* webpackChunkName: "applyBtn" */ '../components/applyBtn')
+            }
           },,
           {
             path: 'normalMemberApplyForm',
             name: 'normalMemberApplyForm',
-            meta: {index:14},
+            meta: { index: 14 },
             components: {
               default: () => import(/* webpackChunkName: "normalMemberApplyForm" */ '../components/normalMemberApplyForm')
-            },
+            }
           },
           {
             path: 'seniorMemberApplyForm',
             name: 'seniorMemberApplyForm',
-            meta: {index:15},
+            meta: { index: 15 },
             components: {
               default: () => import(/* webpackChunkName: "seniorMemberApplyForm" */ '../components/seniorMemberApplyForm')
-            },
+            }
           },
           {
             path: 'directorMemberApplyForm',
             name: 'directorMemberApplyForm',
-            meta: {index:16},
+            meta: { index: 16 },
             components: {
               default: () => import(/* webpackChunkName: "directorMemberApplyForm" */ '../components/directorMemberApplyForm')
-            },
+            }
           }
         ]
       },
       {
         path: 'payList',
         name: 'payList',
-        meta: {index:6},
+        meta: { index: 6 },
         components: {
           default: () => import(/* webpackChunkName: "payList" */ '../components/payList')
         }
@@ -97,7 +97,7 @@ const routes = [
       {
         path: 'certificate',
         name: 'certificate',
-        meta: {index:7},
+        meta: { index: 7 },
         components: {
           default: () => import(/* webpackChunkName: "certificate" */ '../components/certificate')
         }
@@ -105,7 +105,7 @@ const routes = [
       {
         path: 'memberActivity',
         name: 'memberActivity',
-        meta: {index:8},
+        meta: { index: 8 },
         components: {
           default: () => import(/* webpackChunkName: "memberActivity" */ '../views/memberActivity')
         },
@@ -113,35 +113,43 @@ const routes = [
           {
             path: 'activityApply',
             name: 'activityApply',
-            meta: {index:9},
+            meta: { index: 9 },
             components: {
               default: () => import(/* webpackChunkName: "activityApply" */ '../components/activityApply')
-            },
+            }
+          },
+          {
+            path: 'activityApply/:id',
+            name: 'activityApplyId',
+            meta: { index: 30 },
+            components: {
+              default: () => import(/* webpackChunkName: "activityDetails" */ '../components/activityDetails')
+            }
           },
           {
             path: 'activityFootprint',
             name: 'activityFootprint',
-            meta: {index:10},
+            meta: { index: 10 },
             components: {
               default: () => import(/* webpackChunkName: "activityFootprint" */ '../components/activityFootprint')
-            },
+            }
           }
         ]
       },
       {
         path: 'pawdModify',
         name: 'pawdModify',
-        meta: {index:20},
+        meta: { index: 20 },
         components: {
           default: () => import(/* webpackChunkName: "pawdModify" */ '../components/pawdModify')
-        },
+        }
       }
     ]
   },
   {
     path: '*',
     name: '404',
-    meta: {index:12},
+    meta: { index: 12 },
     components: {
       default: () => import(/* webpackChunkName: "login" */ '../views/login')
     }

@@ -39,49 +39,49 @@
 </template>
 
 <script>
-import { Menu, MenuItem, MenuItemGroup, Submenu } from 'element-ui';
+import { Menu, MenuItem, MenuItemGroup, Submenu } from 'element-ui'
 export default {
   components: {
-    "el-submenu": Submenu,
-    "el-menu": Menu,
-    "el-menu-item": MenuItem,
-    "el-menu-item-group": MenuItemGroup,
+    'el-submenu': Submenu,
+    'el-menu': Menu,
+    'el-menu-item': MenuItem,
+    'el-menu-item-group': MenuItemGroup
   },
-  data(){
+  data () {
     return {
       logo: this.global.logo,
       menuItems: [
         {
           index: '/memberService/home',
           icon: 'el-icon-menu',
-          title: '首页',
+          title: '首页'
         },
         {
           index: '/memberService/apply/chooseApplyForm',
           icon: 'el-icon-edit-outline',
-          title: '会员申请',
+          title: '会员申请'
         },
         {
           index: '/memberService/payList',
           icon: 'el-icon-money',
-          title: '在线缴费',
+          title: '在线缴费'
         },
         {
           index: '/memberService/certificate',
           icon: 'el-icon-document',
-          title: '证书领取',
-        },
+          title: '证书领取'
+        }
       ],
       submenuItems: [
         {
           index: '/memberService/memberActivity/activityApply',
           icon: 'el-icon-sell',
-          title: '活动申请',
+          title: '活动申请'
         },
         {
           index: '/memberService/memberActivity/activityFootprint',
           icon: 'el-icon-s-order',
-          title: '活动足迹',
+          title: '活动足迹'
         }
 
       ]

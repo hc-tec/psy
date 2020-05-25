@@ -8,31 +8,31 @@
 </template>
 
 <script>
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 
 export default {
   components: {
     CollapseTransition
   },
-  data(){
+  data () {
     return {
 
     }
   },
   methods: {
-    getApplyForm(index) {
+    getApplyForm (index) {
       return [
-        "normalMemberApplyForm",
-        "seniorMemberApplyForm",
-        "directorMemberApplyForm"
+        'normalMemberApplyForm',
+        'seniorMemberApplyForm',
+        'directorMemberApplyForm'
       ][index]
     },
-    chooseApplyType(index) {
-      let form = this.getApplyForm(index)
-      this.showApplyBtn = false;
+    chooseApplyType (index) {
+      const form = this.getApplyForm(index)
+      this.showApplyBtn = false
       this.$router.push(`/memberService/apply/${form}`)
     }
-  },
+  }
 }
 </script>
 

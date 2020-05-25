@@ -119,9 +119,6 @@
           </td>
         </tr>
 
-
-
-
       </table>
     </div>
     <div class="work-btn">
@@ -136,10 +133,10 @@ import { Input, Button } from 'element-ui'
 
 export default {
   components: {
-    "el-input": Input,
-    "el-button": Button,
+    'el-input': Input,
+    'el-button': Button
   },
-  data(){
+  data () {
     return {
       applyFormData: {
         companyFullName: '',
@@ -158,12 +155,12 @@ export default {
         electionDirectorsPhoneNum: '',
         companyHeadOpinion: '',
         approve: '',
-        remarks: '',
+        remarks: ''
       }
     }
   },
   methods: {
-    submitApplyForm(){
+    submitApplyForm () {
 
     }
   }

@@ -10,15 +10,15 @@
 import applyForm from './applyForm'
 export default {
   components: {
-    "apply-form":applyForm
+    'apply-form': applyForm
   },
-  data(){
+  data () {
     return {
 
     }
   },
   methods: {
-    submitApplyForm(applyFormData){
+    submitApplyForm (applyFormData) {
       console.log(applyFormData)
     }
   }

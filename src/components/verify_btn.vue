@@ -28,7 +28,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: "请输入验证码",
+      default: '请输入验证码'
     },
     // 验证码图片链接
     src: String,
@@ -41,38 +41,38 @@ export default {
     },
     prefixIcon: {
       type: String,
-      default: '',
+      default: ''
     }
   },
   components: {
-    "el-input": Input,
-    "el-button": Button,
+    'el-input': Input,
+    'el-button': Button
   },
-  data(){
+  data () {
     return {
       verify_style: {
-        width: "60%",
-        display: "block",
-        float: "left",
-        "margin-right": "5%",
+        width: '60%',
+        display: 'block',
+        float: 'left',
+        'margin-right': '5%'
       },
       verify_img_style: {
-        height: "40px",
-        width: "35%",
-        "border-radius": "3px",
-        cursor: "pointer",
+        height: '40px',
+        width: '35%',
+        'border-radius': '3px',
+        cursor: 'pointer'
       },
-      tmp_verify_code: this.verify_code,
+      tmp_verify_code: this.verify_code
     }
   },
   methods: {
-    getVerifyCode(){
-      this.$emit('getVerifyCode', this.imgVerify);
+    getVerifyCode () {
+      this.$emit('getVerifyCode', this.imgVerify)
     }
   },
   watch: {
-    tmp_verify_code(val){
-      this.$emit("data-on-change", val)
+    tmp_verify_code (val) {
+      this.$emit('data-on-change', val)
     }
   }
 }

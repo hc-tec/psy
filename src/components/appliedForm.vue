@@ -11,36 +11,32 @@
       :cell-style="cellStyle"
       :header-cell-style="headStyle">
 
-      <el-table-column label="会员申请表">
+      <el-table-column
+        prop="appliedMemberType"
+        label="申请会员类型">
 
-        <el-table-column
-          prop="appliedMemberType"
-          label="申请会员类型">
+      </el-table-column>
 
-        </el-table-column>
+      <el-table-column
+        prop="appliedCondition"
+        label="申请状态">
 
-        <el-table-column
-          prop="appliedCondition"
-          label="申请状态">
+      </el-table-column>
 
-        </el-table-column>
+      <el-table-column
+        prop="appliedTime"
+        label="申请发起日期">
 
-        <el-table-column
-          prop="appliedTime"
-          label="申请发起日期">
+      </el-table-column>
 
-        </el-table-column>
-
-        <el-table-column
-          label="操作"
-          fixed="right"
-          width="100">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">撤销</el-button>
-          </template>
-        </el-table-column>
-
+      <el-table-column
+        label="操作"
+        fixed="right"
+        width="100">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button type="text" size="small">撤销</el-button>
+        </template>
       </el-table-column>
 
     </el-table>
@@ -57,7 +53,6 @@
           {{ btn.text }}
         </el-button>
 
-
       </div>
     </el-dialog>
 
@@ -68,61 +63,61 @@
 import { Table, TableColumn, Button, Dialog } from 'element-ui'
 export default {
   components: {
-    "el-button": Button,
-    "el-table": Table,
-    "el-table-column": TableColumn,
-    "el-dialog": Dialog,
+    'el-button': Button,
+    'el-table': Table,
+    'el-table-column': TableColumn,
+    'el-dialog': Dialog
   },
-  data(){
+  data () {
     return {
       appliedFormData: [
         {
           appliedMemberType: '理事会员',
           appliedCondition: '审核中',
-          appliedTime: '2020-12-12',
+          appliedTime: '2020-12-12'
         }
       ],
       headStyle: {
-        "text-align": "center",
-        "background": "#fff",
+        'text-align': 'center',
+        background: '#fff'
       },
       cellStyle: {
-        "text-align": "center",
+        'text-align': 'center'
       },
       applyBtnInfo: [
         {
           type: 'primary',
           text: '普通会员申请',
-          method: this.chooseApplyType,
+          method: this.chooseApplyType
         },
         {
           type: 'success',
           text: '高级会员申请',
-          method: this.chooseApplyType,
+          method: this.chooseApplyType
         },
         {
           type: 'warning',
           text: '理事单位申请',
-          method: this.chooseApplyType,
+          method: this.chooseApplyType
         }
       ],
-      dialogBtn: false,
+      dialogBtn: false
     }
   },
   methods: {
-    handleClick(row) {
-      console.log(row);
+    handleClick (row) {
+      console.log(row)
     },
-    getApplyForm(index) {
+    getApplyForm (index) {
       return [
-        "normalMemberApplyForm",
-        "seniorMemberApplyForm",
-        "directorMemberApplyForm"
+        'normalMemberApplyForm',
+        'seniorMemberApplyForm',
+        'directorMemberApplyForm'
       ][index]
     },
-    chooseApplyType(index) {
-      let form = this.getApplyForm(index)
-      this.showApplyBtn = false;
+    chooseApplyType (index) {
+      const form = this.getApplyForm(index)
+      this.showApplyBtn = false
       this.$router.push(`/memberService/apply/${form}`)
     }
   }

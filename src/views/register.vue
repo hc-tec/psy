@@ -11,9 +11,9 @@ export default {
   components: {
     regis
   },
-  data(){
+  data () {
     return {
-      logo: this.global.logo,
+      logo: this.global.logo
     }
   }
 }

@@ -2,14 +2,15 @@
   <div id="user-operation">
     <div>
       <i class="el-icon-user"></i>
-      <span> 欢迎会员：{{ this.global.memberInfo.name }}</span>
+      <span> 欢迎会员：{{ this.global.memberInfo.username || '' }}</span>
     </div>
     <div
       @click="modifyPawd">
       <i class="el-icon-lock"></i>
       <span> 修改密码</span>
     </div>
-    <div>
+    <div
+      @click="initExit">
       <i class="el-icon-switch-button"></i>
       <span> 退出系统</span>
     </div>
@@ -17,10 +18,24 @@
 </template>
 
 <script>
+import { delCookie, genericError } from '../func'
+import { elconfirm } from '../element-wrapper'
 export default {
   methods: {
-    modifyPawd(){
+    modifyPawd () {
       this.$router.push('/memberService/pawdModify')
+    },
+    initExit () {
+      const title = '您确定要退出系统吗？'
+      elconfirm(
+        '', title,
+        '', this.confirmExit,
+        genericError
+      )
+    },
+    confirmExit () {
+      delCookie('token')
+      this.$router.push('/login')
     }
   }
 }

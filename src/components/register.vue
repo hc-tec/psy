@@ -10,17 +10,17 @@
           :model="register_info"
           label-width="100px">
 
-          <el-form-item label="真实姓名:" prop="real_name">
+          <el-form-item label="真实姓名:" prop="username">
             <el-input
               placeholder="请输入您的姓名"
-              v-model="register_info.real_name">
+              v-model="register_info.username">
             </el-input>
           </el-form-item>
 
-          <el-form-item label="设置密码:" prop="set_pawd">
+          <el-form-item label="设置密码:" prop="password">
             <el-input
               placeholder="6-16的数字和字母组合"
-              v-model="register_info.set_pawd"
+              v-model="register_info.password"
               maxlength="16"
               show-word-limit>
             </el-input>
@@ -35,14 +35,21 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="手机号:" v-if="phone_verify_on" prop="phone_num">
+          <el-form-item label="手机号:" v-if="phone_verify_on" prop="phone">
             <el-input
               placeholder="请输入手机号"
-              v-model="register_info.phone_num">
+              v-model="register_info.phone">
             </el-input>
           </el-form-item>
 
-          <el-form-item label="验证码:" prop="verify_code">
+          <el-form-item label="会员类型:" prop="identity">
+            <el-radio-group v-model="register_info.identity">
+              <el-radio-button label="普通会员" ></el-radio-button>
+              <el-radio-button label="高级会员"></el-radio-button>
+              <el-radio-button label="理事会员"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <!-- <el-form-item label="验证码:" prop="verify_code">
             <verifyBtn
               :src="verify_code_image"
               :verify_code="register_info.verify_code"
@@ -58,8 +65,7 @@
               @getVerifyCode="getVerifyCode($event)"
               @data-on-change="smsVerifyChange($event)">
             </verifyBtn>
-          </el-form-item>
-
+          </el-form-item> -->
 
         </el-form>
 
@@ -73,7 +79,7 @@
           class="regis_btn"
           type="primary"
           :disabled="!hasReadDoc"
-          @click="submitForm('ruleForm')">
+          @click="initRegister('ruleForm')">
           注册
         </el-button>
 
@@ -84,40 +90,41 @@
 </template>
 
 <script>
-import { Form, FormItem, Input, Button, Radio, Image } from 'element-ui'
-import verifyBtn from './verify_btn'
+import { Form, FormItem, Input, Button, Radio, Image, RadioGroup, RadioButton } from 'element-ui'
+import { ajaxPost, elmessage } from '../element-wrapper'
+import { genericError, validValue } from '../func'
+import { SIGN_UP } from '../api'
 export default {
   name: 'register',
   components: {
-    "el-input": Input,
-    "el-form": Form,
-    "el-form-item": FormItem,
-    "el-button": Button,
-    "el-radio": Radio,
-    "el-image": Image,
-    verifyBtn
+    'el-input': Input,
+    'el-form': Form,
+    'el-form-item': FormItem,
+    'el-button': Button,
+    'el-radio': Radio,
+    'el-image': Image,
+    'el-radio-group': RadioGroup,
+    'el-radio-button': RadioButton
   },
-  data(){
+  data () {
     return {
       phone_verify_on: true,
       hasReadDoc: false,
-      verify_code_image: '/img/浑天刷.jpg',
       register_info: {
-        real_name: '',
-        set_pawd: '',
+        username: '',
+        password: '',
         sure_pawd: '',
-        phone_num: '',
-        verify_code: '',
-        SMS_verify_code: '',
+        phone: '',
+        identity: '普通会员'
       },
       regis_rules: {
-        real_name: [
+        username: [
           {
             required: true,
-            message: '姓名不能为空',
+            message: '姓名不能为空'
           }
         ],
-        set_pawd: [
+        password: [
           {
             required: true,
             message: '密码不能为空'
@@ -129,10 +136,16 @@ export default {
             message: '确认密码不能为空'
           }
         ],
-        phone_num: [
+        phone: [
           {
             required: true,
             message: '手机号码不能为空'
+          }
+        ],
+        identity: [
+          {
+            required: true,
+            message: '会员类型必选'
           }
         ],
         verify_code: [
@@ -151,18 +164,37 @@ export default {
     }
   },
   methods: {
-    submitForm(){
-      this.global.regisPhoneNumber = this.register_info.phone_num;
-      this.$router.push('/success');
+    initRegister () {
+      if (this.hasReadDoc &&
+        validValue(this.register_info) &&
+        this.register_info.password === this.register_info.sure_pawd
+      ) {
+        ajaxPost(
+          SIGN_UP, this.register_info,
+          this.succRegister, genericError
+        )
+        this.global.regisPhoneNumber = this.register_info.phone
+      } else {
+        elmessage('信息不完整或密码不一致', 'error')
+      }
     },
-    numberVerifyChange(val){
+    succRegister (res) {
+      console.log(res.data)
+      if (parseInt(res.data.code) === 201) {
+        this.$router.push('/success')
+      } else {
+        elmessage('注册失败', 'error')
+      }
+    },
+
+    numberVerifyChange (val) {
       // 父子数据双向绑定
-      this.register_info.verify_code = val;
+      this.register_info.verify_code = val
     },
-    smsVerifyChange(val){
-      this.register_info.SMS_verify_code = val;
+    smsVerifyChange (val) {
+      this.register_info.SMS_verify_code = val
     },
-    getVerifyCode(isImgVerify){
+    getVerifyCode (isImgVerify) {
 
     }
   }
@@ -183,8 +215,19 @@ export default {
 }
 #regis_info h1 {
   padding: 10px 0;
-  font-size: 22px;
-  font-weight: normal;
+  font-size: 1.6em;
+  margin-bottom: 20px;
+  position: relative;
+  color: #409EFF;
+}
+#regis_info h1::before {
+  position: absolute;
+  content: '';
+  bottom: 0px;
+  width: 15px;
+  height: 5px;
+  border-radius: 10%;
+  background-color: #409EFF;
 }
 .regis_form {
 

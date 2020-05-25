@@ -2,41 +2,66 @@
   <div id="login-page">
     <el-image :src="logo" class="logo">
     </el-image>
-    <el-button
-      type="success"
-      class="regis"
-      @click="regis">
-      立即注册
-    </el-button>
+    <div class="regis">
+      <p>想获得更多心理学相关资讯</p>
+      <p>注册成为<span>江西省心理咨询师协会会员</span></p>
+      <el-button
+        type="success"
+        @click="regis">
+        立即注册
+      </el-button>
+    </div>
     <login
       id="login"
-      @submit="login($event)">
+      @submit="initLogin">
     </login>
   </div>
 </template>
 
 <script>
-import { Button, Image } from 'element-ui'
 import login from '@/components/login'
+import { Button, Image } from 'element-ui'
+import { ajaxPost, elmessage } from '../element-wrapper'
+import { SIGN_IN } from '../api'
+import { setCookie } from '../func'
 export default {
   name: 'login-regis',
   components: {
     login,
-    "el-image": Image,
-    "el-button": Button,
+    'el-image': Image,
+    'el-button': Button
   },
-  data(){
+  data () {
     return {
-      logo: this.global.logo,
+      logo: this.global.logo
     }
   },
   methods: {
-    regis(){
-      this.$router.push('/register');
+    regis () {
+      this.$router.push('/register')
     },
-    login(loginIngo){
-      // console.log(loginIngo);
-      this.$router.push('/memberService/home');
+    initLogin (loginInfo) {
+      ajaxPost(
+        SIGN_IN, loginInfo,
+        this.succLogin, this.failLogin
+      )
+    },
+
+    succLogin (res) {
+      console.log(res)
+      if (parseInt(res.data.code) === 200) {
+        // 保存 token 到 cookie 中，时长为半小时
+        setCookie('token', res.data.data.token, 1000 * 60 * 30)
+        // 保存用户信息到全局
+        this.global.memberInfo = res.data.data
+        // 转到控制台
+        this.$router.push('/memberService/home')
+      } else {
+        elmessage('用户名或密码错误', 'danger')
+      }
+    },
+    failLogin (e) {
+      elmessage('用户名或密码输入错误', 'error')
     }
   }
 }
@@ -54,7 +79,7 @@ export default {
 }
 #login {
   width: 360px;
-  height: 270px;
+  height: 200px;
   padding: 10px 20px;
   background-color: #fff;
   margin-left: 600px;
@@ -63,9 +88,28 @@ export default {
 }
 .regis {
   position: absolute;
-  left: 200px;
+  left: 100px;
   top: 50%;
   transform: translateY(-50%);
+}
+.regis > * {
+  margin-bottom: 10px;
+}
+.regis > p {
+  color: white;
+}
+.regis > p:nth-child(1) {
+  font-size: 1.1em;
+}
+.regis > p:nth-child(2) {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.regis > p:nth-child(2) > span {
+  color: rgb(237,222,21);
+}
+.regis > button {
+  box-shadow: 2px 5px 5px rgba(120,120,120,.6);
 }
 .logo {
   position: absolute;

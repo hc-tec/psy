@@ -83,7 +83,7 @@
 
 <script>
 import { Table, TableColumn, Button, Dialog } from 'element-ui'
-import { elconfirm, authAjaxGet } from '../element-wrapper'
+import { elconfirm, ajaxGet } from '../element-wrapper'
 import { genericError } from '../func'
 import { PAY_LIST } from '../api'
 export default {
@@ -157,7 +157,7 @@ export default {
       console.log('已付款')
     },
     initGetBill () {
-      authAjaxGet(
+      ajaxGet(
         PAY_LIST, {},
         this.getBillResponse, genericError
       )

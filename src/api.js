@@ -5,9 +5,7 @@ const SIGN_IN = `${IP_ADDRESS}/signin/` // 账号密码登录
 
 const SIGN_UP = `${IP_ADDRESS}/api/user/signup/` // 注册
 
-const USER_INFO_MODIFY = id => { // 用户信息修改 -- 用户名、密码、手机号
-  return `${IP_ADDRESS}/api/user/${id}/updateUser/`
-}
+const USER_INFO_MODIFY = `${IP_ADDRESS}/api/user/updateUser/` // 用户信息修改 -- 用户名、密码、手机号
 
 const COMMON_WORK_FORM = `${IP_ADDRESS}/api/member/mbr/` // GET 通过 token 识别用户获取普通会员工单信息，POST 提交工单数据
 

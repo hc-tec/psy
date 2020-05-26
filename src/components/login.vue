@@ -80,7 +80,10 @@
         prefix-icon="el-icon-lock"
         placeholder="请输入密码"
         v-model="loginInfoV2.password"
-        class="login-input">
+        class="login-input"
+        type="password"
+        show-password
+        @keyup.enter.native="submit">
       </el-input>
     </div>
     <div class="operate_btn">

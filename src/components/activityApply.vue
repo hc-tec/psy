@@ -42,7 +42,7 @@
 
 <script>
 import { Table, TableColumn, Button } from 'element-ui'
-import { authAjaxGet } from '../element-wrapper'
+import { ajaxGet } from '../element-wrapper'
 import { genericError } from '../func'
 import { ACTIVITY } from '../api'
 export default {
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     initGetActivityApply () {
-      authAjaxGet(
+      ajaxGet(
         ACTIVITY, {},
         this.getActivityResponse, genericError
       )
@@ -78,7 +78,7 @@ export default {
       }
     },
     initSignUp (row) {
-      // authAjaxGet(
+      // ajaxGet(
       //   '', {},
       //   this.getSignUpResponse, genericError
       // )

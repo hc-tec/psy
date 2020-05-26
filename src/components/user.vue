@@ -19,7 +19,7 @@
 
 <script>
 import { delCookie, genericError } from '../func'
-import { elconfirm } from '../element-wrapper'
+import { elconfirm, elmessage } from '../element-wrapper'
 export default {
   methods: {
     modifyPawd () {
@@ -34,8 +34,9 @@ export default {
       )
     },
     confirmExit () {
-      delCookie('token')
-      this.$router.push('/login')
+      delCookie('token');
+      this.$router.push('/login');
+      elmessage('成功退出系统', 'warning');
     }
   }
 }

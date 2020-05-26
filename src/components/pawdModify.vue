@@ -44,7 +44,7 @@
 <script>
 import { Button, Input, Form, FormItem, RadioGroup, RadioButton } from 'element-ui'
 import { validValue, genericError } from '../func'
-import { elmessage, authAjaxPost } from '../element-wrapper'
+import { elmessage, ajaxPost } from '../element-wrapper'
 import { USER_INFO_MODIFY } from '../api'
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
         identity: [
           {
             required: true,
-            message: '请输入手机号'
+            message: '请选择用户类型'
           }
         ]
       }
@@ -107,23 +107,27 @@ export default {
           理事会员: 3
         }[identity]
       }
-      this.passwordModifyForm.identity = identity_code(this.passwordModifyForm.identity)
+      this.passwordModifyForm.identity = identity_code(this.passwordModifyForm.identity);
       if (validValue(this.passwordModifyForm) &&
         this.passwordModifyForm.password === this.passwordModifyForm.sureNewPassword
       ) {
         delete this.passwordModifyForm.sureNewPassword
-        const data = JSON.parse(JSON.stringify(this.passwordModifyForm))
-        console.log(this.passwordModifyForm)
-        authAjaxPost(
-          USER_INFO_MODIFY(this.global.memberInfo.userid), this.passwordModifyForm,
+        ajaxPost(
+          USER_INFO_MODIFY, this.passwordModifyForm,
           this.updateResponse, genericError
         )
       } else {
-        elmessage('信息不能为空或前后密码不一致', 'error')
+        this.passwordModifyForm.identity = '普通会员';
+        elmessage('信息不能为空或前后密码不一致', 'error');
       }
     },
     updateResponse (res) {
-      console.log(res)
+      if(parseInt(res.data.code) === 200) {
+        elmessage('信息修改成功！', 'success');
+        this.$router.push('/memberService/home');
+      } else {
+        elmessage('信息修改失败！', 'error');
+      }
     }
   }
 }

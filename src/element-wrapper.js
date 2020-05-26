@@ -6,25 +6,8 @@ import {
 import axios from 'axios'
 import { postDataFormat, getCookie } from './func'
 
-const _config = params => {
-  // 一个小封装，用于 token 验证
-  return {
-    headers: {
-      Authorization: `JWT ${getCookie('token')}`
-    },
-    params
-  }
-}
+axios.defaults.headers['Authorization'] = `JWT ${getCookie('token')}`;
 
-const _config_post = data => {
-  // 一个小封装，用于 token 验证
-  return {
-    headers: {
-      Authorization: `JWT ${getCookie('token')}`
-    },
-    data
-  }
-}
 
 const elmessage = (msg, info) => {
   Message({
@@ -88,29 +71,12 @@ const ajaxDel = (url, params = {}, resolve, reject) => {
     .catch(e => reject(e))
 }
 
-const authAjaxGet = (url, params = {}, resolve, reject, args) => {
-  args = args || []
-  axios.get(url, _config(params))
-    .then(response => resolve(response, ...args))
-    .catch(e => reject(e))
-}
-
-const authAjaxPost = (url, data, resolve, reject) => {
-  console.log((data))
-  axios.post(url, _config_post(postDataFormat(data)))
-    .then(response => resolve(response))
-    .catch(e => reject(e))
-}
-
 export {
-  elmessage
+    elmessage
   , elnotify
   , ajaxGet
   , ajaxPost
   , ajaxDel
   , elconfirm
   , elprompt
-  , authAjaxGet
-  , authAjaxPost
-
 }

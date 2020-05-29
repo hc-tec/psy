@@ -2,12 +2,12 @@
   <div id="user-operation">
     <div>
       <i class="el-icon-user"></i>
-      <span> 欢迎会员：{{ this.global.memberInfo.username || '' }}</span>
+      <span> 欢迎会员：{{ getUser() }}</span>
     </div>
     <div
       @click="modifyPawd">
       <i class="el-icon-lock"></i>
-      <span> 修改密码</span>
+      <span> 修改信息</span>
     </div>
     <div
       @click="initExit">
@@ -37,6 +37,15 @@ export default {
       delCookie('token');
       this.$router.push('/login');
       elmessage('成功退出系统', 'warning');
+    },
+    getUser() {
+      let username;
+      try{
+        username = this.global.memberInfo.username;
+      } catch(e) {
+        return ''
+      }
+      return username;
     }
   }
 }

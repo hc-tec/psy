@@ -21,9 +21,9 @@
 <script>
 import login from '@/components/login'
 import { Button, Image } from 'element-ui'
-import { ajaxPost, elmessage } from '../element-wrapper'
+import { ajaxPost, elmessage, axios } from '../element-wrapper'
 import { SIGN_IN } from '../api'
-import { setCookie } from '../func'
+import { setCookie, getCookie, delCookie } from '../func'
 export default {
   name: 'login-regis',
   components: {
@@ -56,8 +56,10 @@ export default {
         this.global.memberInfo = res.data.data
         // 转到控制台
         this.$router.push('/memberService/home')
+
+        axios.defaults.headers['Authorization'] = `JWT ${getCookie('token')}`;
       } else {
-        elmessage('用户名或密码错误', 'danger')
+        elmessage('用户名或密码错误', 'error')
       }
     },
     failLogin (e) {

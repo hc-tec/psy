@@ -3,7 +3,7 @@
 
     <applied-form />
 
-    <div class="apply-btn">
+    <!-- <div class="apply-btn">
 
         <el-button
           v-for="(btn,index) in applyBtnInfo"
@@ -13,7 +13,7 @@
           {{ btn.text }}
         </el-button>
 
-    </div>
+    </div> -->
   </div>
 </template>
 

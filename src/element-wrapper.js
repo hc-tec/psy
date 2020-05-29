@@ -59,9 +59,24 @@ const ajaxGet = (url, params = {}, resolve, reject, args) => {
     .catch(e => reject(e))
 }
 
-const ajaxPost = (url, data, resolve, reject) => {
+const ajaxPost = (url, data, resolve, reject, args) => {
+  args = args || []
   axios.post(url, postDataFormat(data))
-    .then(response => resolve(response))
+    .then(response => resolve(response, ...args))
+    .catch(e => reject(e))
+}
+
+const ajaxPut = (url, params = {}, resolve, reject, args) => {
+  args = args || []
+  axios.put(url, postDataFormat(params))
+    .then(response => resolve(response, ...args))
+    .catch(e => reject(e))
+}
+
+const ajaxPatch = (url, params = {}, resolve, reject, args) => {
+  args = args || []
+  axios.patch(url, postDataFormat(params))
+    .then(response => resolve(response, ...args))
     .catch(e => reject(e))
 }
 
@@ -71,12 +86,29 @@ const ajaxDel = (url, params = {}, resolve, reject) => {
     .catch(e => reject(e))
 }
 
+const registerPost = (url, data, resolve, reject) => {
+  delete axios.defaults.headers['Authorization'];
+  axios.post(url, postDataFormat(data))
+    .then(response => resolve(response))
+    .catch(e => reject(e))
+  axios.defaults.headers['Authorization'] = `JWT ${getCookie('token')}`;
+
+}
+
+
+
+
+
 export {
-    elmessage
+    axios
+  , elmessage
   , elnotify
   , ajaxGet
   , ajaxPost
+  , ajaxPut
+  , ajaxPatch
   , ajaxDel
   , elconfirm
   , elprompt
+  , registerPost
 }

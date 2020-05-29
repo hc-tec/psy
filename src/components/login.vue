@@ -120,8 +120,8 @@ export default {
         phone: ''
       },
       loginInfoV2: {
-        username: '',
-        password: ''
+        username: 'titto',
+        password: 'sun19961203'
       }
     }
   },

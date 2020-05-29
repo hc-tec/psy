@@ -5,7 +5,7 @@
         :tableData="details"
       />
       <div class="activity-operate-btn">
-        <el-button type="primary" @click="signUp">报名</el-button>
+        <el-button type="primary" @click="initSignUp">报名</el-button>
       </div>
     </div>
   </div>
@@ -14,6 +14,9 @@
 <script>
 import { Button } from 'element-ui'
 import twoColumnTable from './two-column-table'
+import { ajaxPost, elmessage } from '../element-wrapper'
+import { ACTIVITY_APPLY } from '../api'
+import { genericError } from '../func'
 export default {
   components: {
     'el-button': Button,
@@ -32,18 +35,33 @@ export default {
           是否结束: this.global.activityDetails.act_is_available === false ? '否' : '是',
           是否需要审核: this.global.activityDetails.act_need_audit === false ? '无需审核' : '需要审核'
         }
-      }
+      },
+      act_need_audit: false,
     }
   },
   methods: {
-    signUp () {
-      // ajaxGet(
-      //   '', {},
-      //   this.getSignUpResponse, genericError
-      // )
-      this.global.isSighUpPage = true
-      this.$router.push('/success')
-    }
+    initSignUp () {
+      this.act_need_audit = this.global.activityDetails.act_need_audit;
+      let data = {
+        relate_activity: this.global.activityDetails.id,
+        audit_user: this.global.memberInfo.userid,
+        audit_member: this.global.applyForms[0].id
+      }
+      ajaxPost(
+        ACTIVITY_APPLY, data,
+        this.getSignUpResponse, genericError,
+      )
+    },
+    getSignUpResponse (res) {
+      if(parseInt(res.data.code) === 201) {
+        if(!this.act_need_audit){
+          this.global.isSighUpPage = true
+          this.$router.push('/success')
+        } else {
+          elmessage('报名成功', 'success');
+        }
+      }
+    },
   }
 }
 </script>

@@ -19,18 +19,22 @@
 
           <el-form-item label="设置密码:" prop="password">
             <el-input
+              type="password"
               placeholder="6-16的数字和字母组合"
               v-model="register_info.password"
               maxlength="16"
+              show-password
               show-word-limit>
             </el-input>
           </el-form-item>
 
           <el-form-item label="确认密码:" prop="sure_pawd">
             <el-input
+              type="password"
               placeholder="请再次输入密码"
               v-model="register_info.sure_pawd"
               maxlength="16"
+              show-password
               show-word-limit>
             </el-input>
           </el-form-item>
@@ -91,7 +95,7 @@
 
 <script>
 import { Form, FormItem, Input, Button, Radio, Image, RadioGroup, RadioButton } from 'element-ui'
-import { ajaxPost, elmessage } from '../element-wrapper'
+import { ajaxPost, elmessage, registerPost } from '../element-wrapper'
 import { genericError, validValue } from '../func'
 import { SIGN_UP } from '../api'
 export default {
@@ -111,10 +115,10 @@ export default {
       phone_verify_on: true,
       hasReadDoc: false,
       register_info: {
-        username: '',
-        password: '',
-        sure_pawd: '',
-        phone: '',
+        username: 'test',
+        password: 'sun19961203',
+        sure_pawd: 'sun19961203',
+        phone: '13177666570',
         identity: '普通会员'
       },
       regis_rules: {
@@ -169,7 +173,16 @@ export default {
         validValue(this.register_info) &&
         this.register_info.password === this.register_info.sure_pawd
       ) {
-        ajaxPost(
+        const identity_code = identity => {
+          return {
+            普通会员: 1,
+            高级会员: 2,
+            理事会员: 3
+          }[identity]
+        }
+        this.register_info.identity = identity_code(this.register_info.identity);
+        delete this.register_info.sure_pawd;
+        registerPost(
           SIGN_UP, this.register_info,
           this.succRegister, genericError
         )

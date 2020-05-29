@@ -11,14 +11,15 @@
 <script>
 import user from '../components/user'
 import controlNav from '../components/nav'
-import { getCookie } from '../func'
-import { elmessage } from '../element-wrapper'
+import { getCookie, genericError } from '../func'
+import { elmessage, ajaxGet } from '../element-wrapper'
+import { COMMON_WORK_FORM, INC_WORK_FORM } from '../api'
 export default {
   components: {
     'control-nav': controlNav,
     user
   },
-  data () {
+  data() {
     return {
       transitionName: ''
     }
@@ -32,14 +33,38 @@ export default {
       }
     }
   },
-  mounted () {
+  methods: {
+    initGetMemberInfo() {
+      let url;
+      if(this.global.memberInfo.identity === 3)
+        url = INC_WORK_FORM
+      else
+        url = COMMON_WORK_FORM
+      ajaxGet(
+        url, {},
+        this.getMemberInfoResponse, genericError
+      )
+    },
+    getMemberInfoResponse(res) {
+      if(parseInt(res.data.code) === 200) {
+        const flag = res.data.data.length !== 0;
+        if(flag)
+          this.global.formalMemberInfo = res.data.data[0]
+        else
+          this.global.formalMemberInfo = [];
+      }
+    }
+  },
+  created() {
     if (!getCookie('token')) {
       elmessage('您未登录或登录已过期，即将跳转到登录界面', 'warning')
       setTimeout(() => {
         this.$router.push('/login')
       }, 1000)
+    } else {
+      this.initGetMemberInfo()
     }
-  }
+  },
 }
 </script>
 

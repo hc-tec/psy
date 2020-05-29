@@ -147,6 +147,14 @@ const routes = [
     ]
   },
   {
+    path: '/search',
+    name: 'search',
+    meta: { index: 100 },
+    components: {
+      default: () => import(/* webpackChunkName: "search" */ '../components/search')
+    }
+  },
+  {
     path: '*',
     name: '404',
     meta: { index: 12 },

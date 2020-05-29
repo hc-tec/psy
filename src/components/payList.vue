@@ -130,7 +130,10 @@ export default {
           text: 'xx银行转账'
         }
       ],
-      orderID: 0
+      orderID: 0,
+      status: ['已注册，未提交申请', '申请正在审核中', '审核驳回，请检查申请信息',
+               '审核通过，等待缴费', '缴费效验中', '缴费效验不通过，请重新确认',
+               '缴费效验通过，已成为正式会员' ]
     }
   },
   methods: {
@@ -164,7 +167,10 @@ export default {
     },
     getBillResponse (res) {
       if (parseInt(res.data.code) === 200) {
-        this.payListData = res.data.data
+        for(let data of res.data.data) {
+          data.status = this.status[data.status];
+        }
+        this.payListData = res.data.data;
       }
     }
   },

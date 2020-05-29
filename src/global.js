@@ -16,6 +16,15 @@ export default {
   isSighUpPage: false,
 
   // 用户信息
-  memberInfo: null
+  memberInfo: {},
+
+  // 会员信息
+  formalMemberInfo: [],
+
+  // 申请表汇总
+  applyForms: [],
+
+  // 编辑申请表前的信息储存
+  editForm: {},
 
 }

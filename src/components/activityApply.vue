@@ -1,6 +1,7 @@
 <template>
   <div id="activityApply">
     <el-table
+      v-if="this.global.formalMemberInfo.length !== 0"
       :data="activityApplyTableData">
       <el-table-column
         prop="act_title"
@@ -37,14 +38,15 @@
       </el-table-column>
 
     </el-table>
+    <p v-else>您还未成为正式会员，不能申请活动</p>
   </div>
 </template>
 
 <script>
 import { Table, TableColumn, Button } from 'element-ui'
-import { ajaxGet } from '../element-wrapper'
+import { ajaxGet, ajaxPost, elmessage } from '../element-wrapper'
 import { genericError } from '../func'
-import { ACTIVITY } from '../api'
+import { ACTIVITY, ACTIVITY_APPLY } from '../api'
 export default {
   components: {
     'el-table': Table,
@@ -53,16 +55,8 @@ export default {
   },
   data () {
     return {
-      activityApplyTableData: [
-        {
-          id: 1,
-          name: '年会',
-          time: '2020-12-12',
-          site: '江西',
-          method: '线上',
-          approve: false
-        }
-      ]
+      activityApplyTableData: [],
+      act_need_audit: false,
     }
   },
   methods: {
@@ -78,15 +72,35 @@ export default {
       }
     },
     initSignUp (row) {
-      // ajaxGet(
-      //   '', {},
-      //   this.getSignUpResponse, genericError
-      // )
-      this.global.isSighUpPage = true
-      this.$router.push('/success')
+      this.act_need_audit = row.act_need_audit;
+      let data = {
+        relate_activity: row.id,
+        audit_user: this.global.memberInfo.userid,
+        audit_member: this.global.applyForms[0].id
+      }
+      ajaxPost(
+        ACTIVITY_APPLY, data,
+        this.getSignUpResponse, genericError,
+      )
     },
-    getSignUpResponse (res) {
-      this.$router.push('/success')
+    getSignUpResponse (res, row) {
+      if(parseInt(res.data.code) === 201) {
+        if(!this.act_need_audit){
+          this.global.isSighUpPage = true
+          this.$router.push('/success')
+        } else {
+          elmessage('报名成功', 'success');
+        }
+      }
+    },
+    initGetResultOfApplyAct() {
+      ajaxGet(
+        ACTIVITY_APPLY, {},
+        this.getResultResponse, genericError,
+      )
+    },
+    getResultResponse(res) {
+      console.log(res)
     },
     learnMore (row) {
       this.global.activityDetails = row
@@ -102,6 +116,7 @@ export default {
   },
   mounted () {
     this.initGetActivityApply()
+    this.initGetResultOfApplyAct()
   }
 }
 </script>

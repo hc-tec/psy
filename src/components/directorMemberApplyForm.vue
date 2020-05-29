@@ -10,73 +10,73 @@
         <tr>
           <td>单位全称</td>
           <td colspan="4">
-            <el-input v-model="applyFormData.companyFullName" />
+            <el-input v-model="applyFormData.mbse_name" />
           </td>
         </tr>
 
         <tr>
           <td>所在地区及办公地址</td>
           <td>
-            <el-input v-model="applyFormData.companyArea" />
+            <el-input v-model="applyFormData.inc_loc" />
           </td>
           <td>邮编</td>
           <td>
-            <el-input v-model="applyFormData.postCode" />
+            <el-input v-model="applyFormData.inc_code" />
           </td>
         </tr>
 
         <tr>
           <td>电话</td>
           <td>
-            <el-input v-model="applyFormData.phoneNum" />
+            <el-input v-model="applyFormData.inc_phone" />
           </td>
           <td>传真</td>
           <td>
-            <el-input v-model="applyFormData.fax" />
+            <el-input v-model="applyFormData.inc_fax" />
           </td>
         </tr>
 
         <tr>
           <td>电子邮箱</td>
           <td>
-            <el-input v-model="applyFormData.email" />
+            <el-input v-model="applyFormData.inc_email" />
           </td>
           <td>网址</td>
           <td>
-            <el-input v-model="applyFormData.website" />
+            <el-input v-model="applyFormData.inc_site" />
           </td>
         </tr>
 
         <tr>
           <td>主管机关</td>
           <td>
-            <el-input v-model="applyFormData.competentAuthority" />
+            <el-input v-model="applyFormData.inc_charge" />
           </td>
           <td>组织机构代码</td>
           <td>
-            <el-input v-model="applyFormData.organizationCode" />
+            <el-input v-model="applyFormData.inc_charge_code" />
           </td>
         </tr>
 
         <tr>
           <td>法定代表</td>
           <td>
-            <el-input v-model="applyFormData.legalRepresentative" />
+            <el-input v-model="applyFormData.inc_corporate" />
           </td>
           <td>法人代表联系方式</td>
           <td>
-            <el-input v-model="applyFormData.legalRepresentativePhoneNum" />
+            <el-input v-model="applyFormData.inc_corp_phone" />
           </td>
         </tr>
 
         <tr>
           <td>推举理事</td>
           <td>
-            <el-input v-model="applyFormData.electionDirectors" />
+            <el-input v-model="applyFormData.inc_director" />
           </td>
           <td>理事手机</td>
           <td>
-            <el-input v-model="applyFormData.electionDirectorsPhoneNum" />
+            <el-input v-model="applyFormData.inc_director_phone" />
           </td>
         </tr>
 
@@ -87,7 +87,7 @@
               type="textarea"
               resize="none"
               :rows="3"
-              v-model="applyFormData.companyHeadOpinion" />
+              v-model="applyFormData.inc_opinion" />
           </td>
         </tr>
 
@@ -101,7 +101,8 @@
               type="textarea"
               resize="none"
               :rows="3"
-              v-model="applyFormData.approve" />
+              v-model="applyFormData.mbse_judge"
+              disabled />
           </td>
         </tr>
 
@@ -115,7 +116,7 @@
               type="textarea"
               resize="none"
               :rows="3"
-              v-model="applyFormData.remarks" />
+              v-model="applyFormData.inc_info" />
           </td>
         </tr>
 
@@ -130,6 +131,9 @@
 
 <script>
 import { Input, Button } from 'element-ui'
+import { ajaxPut, ajaxPost, elmessage } from '../element-wrapper'
+import { APPLY_ICN_WORK_FORM_MODIFY, INC_WORK_FORM } from '../api'
+import { genericError } from '../func'
 
 export default {
   components: {
@@ -138,31 +142,53 @@ export default {
   },
   data () {
     return {
-      applyFormData: {
-        companyFullName: '',
-        companyArea: '',
-        companyAddr: '',
-        postCode: '',
-        phoneNum: '',
-        fax: '',
-        email: '',
-        website: '',
-        competentAuthority: '',
-        organizationCode: '',
-        legalRepresentative: '',
-        legalRepresentativePhoneNum: '',
-        electionDirectors: '',
-        electionDirectorsPhoneNum: '',
-        companyHeadOpinion: '',
-        approve: '',
-        remarks: ''
+      applyFormData: Object.keys(this.global.editForm).length > 0 ? this.global.editForm : {
+        mbse_name: 'as',
+        inc_loc: 'asa',
+        inc_code: 'as',
+        inc_phone: 'as',
+        inc_fax: 'as',
+        inc_email: 'as',
+        inc_site: 'as',
+        inc_charge: 'as',
+        inc_charge_code: 'fds',
+        inc_corporate: 'sdfsd',
+        inc_corp_phone: 'sdf',
+        inc_director: 'sdf',
+        inc_director_phone: 'asd',
+        inc_opinion: 'as',
+        mbse_judge: '',
+        inc_info: 'as'
       }
     }
   },
   methods: {
-    submitApplyForm () {
+    submitApplyForm() {
+      let applyFormData = this.applyFormData;
+      applyFormData.mbse_user = this.global.memberInfo.userid;
 
+      if(typeof this.global.editForm.id === 'number' || this.global.applyForms.length >= 1) {
+        ajaxPut(
+          APPLY_ICN_WORK_FORM_MODIFY(this.global.memberInfo.userid), applyFormData,
+          this.getApplyFormResponse, genericError
+        )
+      } else {
+        ajaxPost(
+          INC_WORK_FORM, applyFormData,
+          this.getApplyFormResponse, genericError
+        )
+      }
+    },
+    getApplyFormResponse(res) {
+      if(parseInt(res.data.code) === 201) {
+        elmessage('提交成功', 'success');
+        this.$router.push('/memberService/apply/chooseApplyForm/');
+      }
+      console.log(res)
     }
+  },
+  mounted() {
+    console.log(this.global.editForm)
   }
 }
 </script>

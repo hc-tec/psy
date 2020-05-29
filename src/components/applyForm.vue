@@ -9,11 +9,11 @@
       <tr>
         <td>姓名</td>
         <td>
-          <el-input v-model="applyFormData.name" />
+          <el-input v-model="applyFormData.mbse_name" />
         </td>
         <td>性别</td>
         <td>
-          <el-select v-model="applyFormData.sex" placeholder="请选择">
+          <el-select v-model="applyFormData.mbr_gender" placeholder="请选择">
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
@@ -21,11 +21,11 @@
         <td rowspan="3" class="avatar-content">
           <el-upload
             class="avatar-uploader"
-            action="#"
+            action="fake-action"
+            accept="image/jpeg,image/gif,image/png,image/bmp"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="applyFormData.avatar" :src="applyFormData.avatar" class="avatar">
+            :http-request="ImgUpload">
+            <img v-if="applyFormData.mbr_avatar" :src="applyFormData.mbr_avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </td>
@@ -37,11 +37,11 @@
           <el-date-picker
             type="date"
             placeholder="选择日期"
-            v-model="applyFormData.birth" />
+            v-model="applyFormData.mbr_birth" />
         </td>
         <td>政治面貌</td>
         <td>
-          <el-select v-model="applyFormData.politication" placeholder="请选择">
+          <el-select v-model="applyFormData.mbr_political" placeholder="请选择">
             <el-option v-for="identy in politication" :key="identy" :label="identy" :value="identy"></el-option>
           </el-select>
         </td>
@@ -50,13 +50,13 @@
       <tr>
         <td>民族</td>
         <td>
-          <el-select v-model="applyFormData.people" placeholder="请选择">
+          <el-select v-model="applyFormData.mbr_folk" placeholder="请选择">
             <el-option v-for="people in peoples" :key="people" :label="people" :value="people"></el-option>
           </el-select>
         </td>
         <td>技术职称</td>
         <td>
-          <el-select v-model="applyFormData.technicalTitle" placeholder="请选择">
+          <el-select v-model="applyFormData.mbr_title" placeholder="请选择">
             <el-option v-for="tec in technical" :key="tec" :label="tec" :value="tec"></el-option>
           </el-select>
         </td>
@@ -65,32 +65,29 @@
       <tr>
         <td>身份证号</td>
         <td>
-          <el-input v-model="applyFormData.identifyCode" />
+          <el-input v-model="applyFormData.mbr_id_num" />
         </td>
-        <td>毕业院校</td>
+        <td>毕业院校及专业</td>
         <td colspan="2">
-          <el-input v-model="applyFormData.graduateUni" />
+          <el-input v-model="applyFormData.mbr_graduate" />
         </td>
       </tr>
 
       <tr>
-        <td>专业</td>
-        <td>
-          <el-input v-model="applyFormData.major" />
-        </td>
+
         <td>毕业时间</td>
-        <td colspan="2">
+        <td colspan="4">
           <el-date-picker
             type="date"
             placeholder="选择日期"
-            v-model="applyFormData.graduateTime" />
+            v-model="applyFormData.mbr_graduate_time" />
         </td>
       </tr>
 
       <tr>
         <td>资格证培训机构</td>
         <td>
-          <el-input v-model="applyFormData.qualificationOrg" />
+          <el-input v-model="applyFormData.mbr_training_ins" />
         </td>
         <td>培训时间</td>
         <td colspan="2">
@@ -99,49 +96,46 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            v-model="applyFormData.traningTime" />
+            v-model="applyFormData.mbr_training_date" />
         </td>
       </tr>
 
       <tr>
-        <td>工作单位</td>
-        <td>
-          <el-input v-model="applyFormData.workplace" />
-        </td>
-        <td>单位职务</td>
-        <td colspan="2">
-          <el-input v-model="applyFormData.career" />
+        <td>工作单位及职务</td>
+        <td colspan="6">
+          <el-input v-model="applyFormData.mbr_job" />
         </td>
       </tr>
 
       <tr>
         <td>通讯地址</td>
         <td>
-          <el-input v-model="applyFormData.postalAddr" />
+          <el-input v-model="applyFormData.mbr_loc" />
         </td>
         <td>邮政编码</td>
         <td colspan="2">
-          <el-input v-model="applyFormData.postCode" />
+          <el-input v-model="applyFormData.mbr_zip" />
         </td>
       </tr>
 
       <tr>
         <td>Email</td>
         <td>
-          <el-input v-model="applyFormData.email" style="max-width:75%;margin-right:3%" />
-          <el-button type="primary" style="max-width:20%">修改</el-button>
+          <el-input v-model="applyFormData.mbr_email" />
         </td>
         <td>手机</td>
         <td colspan="2">
-          <el-input v-model="applyFormData.phoneNum" style="max-width:75%;margin-right:3%" />
-          <el-button type="primary" style="max-width:20%">修改</el-button>
+          <el-input v-model="applyFormData.mbr_phone" />
+
+          <!-- <el-input v-model="applyFormData.mbr_phone" style="max-width:75%;margin-right:3%" />
+          <el-button type="primary" style="max-width:20%">修改</el-button> -->
         </td>
       </tr>
 
       <tr>
         <td>心理咨询师级别</td>
         <td>
-          <el-select v-model="applyFormData.counselorLevel" placeholder="请选择">
+          <el-select v-model="applyFormData.mbr_cert" placeholder="请选择">
             <el-option v-for="level in psyLevel" :key="level" :label="level" :value="level"></el-option>
           </el-select>
         </td>
@@ -150,16 +144,24 @@
           <el-date-picker
             type="year"
             placeholder="选择年份"
-            v-model="applyFormData.awardYear" />
+            v-model="applyFormData.mbr_cert_date" />
         </td>
       </tr>
 
       <tr>
         <td>证书编号</td>
         <td colspan="4">
-          <el-input v-model="applyFormData.certificateCode" />
+          <el-input v-model="applyFormData.mbr_cert_code" />
         </td>
       </tr>
+
+       <tr>
+        <td>协会审批意见</td>
+        <td colspan="4">
+          <el-input type="textarea" v-model="applyFormData.mbse_judge" disabled />
+        </td>
+      </tr>
+
     </table>
     <div class="work-btn">
       <el-button type="success">保存</el-button>
@@ -170,6 +172,10 @@
 
 <script>
 import { Input, Select, Option, DatePicker, Upload, Button } from 'element-ui'
+import { elconfirm, ajaxPost } from '../element-wrapper'
+import { getTimeStr, genericError } from '../func'
+import { AVATAR } from '../api'
+import Axios from 'axios'
 export default {
   props: {
     applyFormTitle: String
@@ -202,56 +208,75 @@ export default {
         '民革党员', '民盟盟员', '民建会员', '民进会员',
         '农工党党员', '致公党党员', '九三学社社员', '台盟盟员', '无党派人士', '群众'
       ],
-      applyFormData: {
-        name: '',
-        sex: '',
-        birth: '',
-        avatar: '',
-        politication: '',
-        people: '',
-        technicalTitle: '',
-        identifyCode: '',
-        graduateUni: '',
-        major: '',
-        graduateTime: '',
-        qualificationOrg: '',
-        traningTime: '',
-        workplace: '',
-        career: '',
-        postalAddr: '',
-        postCode: '',
-        email: '',
-        phoneNum: '',
-        counselorLevel: '',
-        awardYear: '',
-        certificateCode: '',
-        scientificResearchProject: [],
-        academicPapers: [],
-        approve: '',
-        vipCode: ''
-      }
+      applyFormData: Object.keys(this.global.editForm).length > 0 ? this.global.editForm : {
+        mbse_name: 'asdas',
+        mbr_gender: '',
+        mbr_birth: '',
+        mbr_avatar: '',
+        mbr_political: '',
+        mbr_folk: '',
+        mbr_title: 'asd',
+        mbr_id_num: 'asas',
+        mbr_graduate: 'asa',
+        mbr_graduate_time: '',
+        mbr_training_ins: 'as',
+        mbr_training_date: '',
+        mbr_job: 'asas',
+        mbr_loc: 'asa',
+        mbr_zip: 'a',
+        mbr_email: 'gdfg',
+        mbr_phone: 'asfhf',
+        mbr_cert: 'asffdsd',
+        mbr_cert_date: '',
+        mbr_cert_code: 'dsgdq',
+        mbr_achievement: [],
+        mbse_judge: '',
+        mbse_code: 'sdfsdf'
+      },
     }
   },
   methods: {
-    handleAvatarSuccess (res, file) {
-      this.applyFormData.avatar = URL.createObjectURL(file.raw)
+    handleAvatarSuccess(res) {
+      console.log(res);
     },
-    beforeAvatarUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
+    beforeAvatarUpload(file) {
+      const isJPG = ['image/jpeg', 'image/png', 'image/bmp'].indexOf(file.type) !== -1;
+      const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+        this.$message.error('上传的文件或照片格式不符!')
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
       return isJPG && isLt2M
     },
-    submitApplyForm () {
+    submitApplyForm() {
+      this.applyFormData.mbr_birth = getTimeStr(this.applyFormData.mbr_birth, 'day');
+      this.applyFormData.mbr_graduate_time = getTimeStr(this.applyFormData.mbr_graduate_time, 'day');
+      this.applyFormData.mbr_training_date = `${getTimeStr(this.applyFormData.mbr_training_date[0], 'day')} ~ ${getTimeStr(this.applyFormData.mbr_training_date[1], 'day')}`;
+      this.applyFormData.mbr_cert_date = getTimeStr(this.applyFormData.mbr_cert_date, 'year');
       this.$emit('submitApplyForm', this.applyFormData)
+    },
+    ImgUpload(params) {
+      const file = params.file;
+      const satisfy = this.beforeAvatarUpload(file);
+      if(satisfy) {
+        const file_form = new FormData();
+        // 文件对象
+        file_form.append('mbr_avatar', file);
+        file_form.append('id', this.global.memberInfo.userid);
+        const config = {
+          headers: {'Content-Type': 'multypart/form-data'}
+        };
+        Axios.post(
+          AVATAR(this.global.memberInfo.userid), file_form, config)
+          .then(res => {
+            this.handleAvatarSuccess(res)
+          })
+      }
     }
-  }
+  },
 }
 </script>
 

@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       passwordModifyForm: {
-        username: this.global.memberInfo.username,
+        username: this.global.memberInfo.username || '',
         password: '',
         sureNewPassword: '',
         phone: '',

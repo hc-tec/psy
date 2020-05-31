@@ -2,7 +2,7 @@
   <div id="payList">
     <div>
       <el-table
-        :data="payListData">
+        :data="this.global.payListData">
 
         <el-table-column
           label="订单号"
@@ -36,14 +36,17 @@
 
         <el-table-column
           label="操作"
-          prop="">
+          prop=""
+          width="120"
+          fixed="right">
           <template slot-scope="scope">
             <el-button
               type="primary"
               icon="el-icon-money"
               size="small"
-              @click="initPay(scope.row)">
-              缴纳会费
+              @click="initPay(scope.row)"
+              :disabled="'缴费审核通过' === scope.row.status">
+              {{ '缴费审核通过' === scope.row.status ? '已缴纳会费' : '缴纳会费' }}
             </el-button>
           </template>
         </el-table-column>
@@ -53,15 +56,19 @@
 
       <el-dialog
         title="付款二维码"
-        :visible.sync="payQRCode"
-        :before-close="hasPay">
+        :visible.sync="payQRCode">
         <div class="QRImg-content">
+          <p v-if="payQRCodeObj[index].way === payQRCodeObj[2].way">请向下方银行号码转账，完成缴费</p>
+          <p v-if="payQRCodeObj[index].way === payQRCodeObj[2].way">{{ bank_card }}</p>
           <div
             class="QRImg">
-            <img :src="payQRCodeObj[index].img" />
+            <img :src="payQRCodeObj[index].img" v-if="payQRCodeObj[index].way !== payQRCodeObj[2].way" />
             <span :style="'background:'+payQRCodeObj[index].bgc">{{ payQRCodeObj[index].way }}</span>
           </div>
+
+          <el-button type="primary" @click="hasPay">确认付款</el-button>
         </div>
+
       </el-dialog>
 
       <el-dialog :visible.sync="payMethodAc">
@@ -83,9 +90,9 @@
 
 <script>
 import { Table, TableColumn, Button, Dialog } from 'element-ui'
-import { elconfirm, ajaxGet } from '../element-wrapper'
+import { elconfirm, ajaxGet, ajaxPut, elmessage } from '../element-wrapper'
 import { genericError } from '../func'
-import { PAY_LIST } from '../api'
+import { PAY_LIST_Inc, PAY_LIST_Member, PAY_FEE_Inc, PAY_FEE_Member, ORDER_STATUS, COUNCIL_MEMBER } from '../api'
 export default {
   components: {
     'el-button': Button,
@@ -95,10 +102,11 @@ export default {
   },
   data () {
     return {
+      bank_card: 19824923423,
       payQRCode: false, // 二维码对话框开关
       payMethodAc: false, // 付款方式对话框开关
       index: 0, // 选择的付款方式索引
-      payListData: [],
+
       payQRCodeObj: [
         {
           way: '支付宝',
@@ -111,7 +119,7 @@ export default {
           bgc: '#22ab38'
         },
         {
-          way: 'xx银行',
+          way: '银行转账',
           img: '/img/浑天刷.jpg',
           bgc: '#f00'
         }
@@ -119,63 +127,97 @@ export default {
       payMethods: [
         {
           type: 'primary',
-          text: '支付宝支付'
+          text: '支付宝'
         },
         {
           type: 'success',
-          text: '微信支付'
+          text: '微信'
         },
         {
           type: 'danger',
-          text: 'xx银行转账'
+          text: '银行转账'
         }
       ],
-      orderID: 0,
-      status: ['已注册，未提交申请', '申请正在审核中', '审核驳回，请检查申请信息',
-               '审核通过，等待缴费', '缴费效验中', '缴费效验不通过，请重新确认',
-               '缴费效验通过，已成为正式会员' ]
+      order_id: 0,
+      // 用户选择的付款方式
+      payMethod: ''
     }
   },
   methods: {
     initPay (row) {
-      this.orderID = row.id
-      this.payMethodAc = true
+      this.order_id = row.id
+      this.payMethodAc = true;
+      // const method = row.method;
+      // this.payQRCodeObj.some((el,index) => {
+      //   if(el.way === method) {
+      //     this.index = index;
+      //     return true;
+      //   }
+      // })
+      // this.payQRCode = true;
     },
     choosePayMethod (index) {
-      this.index = index
+      this.payMethodAc = false;
+      this.payQRCode = true;
       // 付款方式
-      const payMethod = this.payMethods[index].text
-      this.payMethodAc = false
-      this.payQRCode = true
+      this.payMethod = this.payMethods[index].text
+      this.index = index;
     },
-    hasPay (closeDialog) {
+    hasPay () {
       elconfirm(
         '', '是否已付款',
         '', this.confirmPay, genericError
       )
       // 关闭缴费对话框
-      closeDialog()
+     this.payQRCode = false;
     },
     confirmPay () {
+      let data = {
+        status: '3001',
+        method: this.payMethod,
+        relate_user: this.global.memberInfo.userid
+      }
+      let url;
+      if(parseInt(this.global.memberInfo.identity) === COUNCIL_MEMBER) {
+        url = PAY_FEE_Inc
+      } else {
+        url = PAY_FEE_Member
+      }
+      ajaxPut(
+        url(this.order_id), data,
+        this.getPayResponse, genericError,
+      )
       console.log('已付款')
     },
+    getPayResponse(res) {
+      if(parseInt(res.data.code) === 201) {
+        elmessage('成功提交，等待后台审核')
+        this.initGetBill()
+      }
+    },
     initGetBill () {
+      let url;
+      if(parseInt(this.global.memberInfo.identity) === COUNCIL_MEMBER) {
+        url = PAY_LIST_Inc;
+      } else {
+        url = PAY_LIST_Member;
+      }
       ajaxGet(
-        PAY_LIST, {},
+        url, {},
         this.getBillResponse, genericError
       )
     },
     getBillResponse (res) {
       if (parseInt(res.data.code) === 200) {
         for(let data of res.data.data) {
-          data.status = this.status[data.status];
+          data.status = ORDER_STATUS[data.status];
         }
-        this.payListData = res.data.data;
+        this.global.payListData = res.data.data;
       }
     }
   },
-  mounted () {
-    this.initGetBill()
+  created() {
+    this.initGetBill();
   }
 }
 </script>
@@ -186,6 +228,14 @@ export default {
 }
 .QRImg-content {
   display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.QRImg-content > * {
+  margin-bottom: 20px;
+}
+.QRImg-content button {
+  width: 200px;
 }
 .QRImg {
   width: 100%;

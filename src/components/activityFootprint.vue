@@ -145,7 +145,6 @@ export default {
         this.$set(this.hasExecute, parseInt(this.index), true);
         elmessage('提交成功', 'success');
       }
-      console.log(res);
     }
   },
   created() {

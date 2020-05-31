@@ -49,10 +49,17 @@ const APPLY_FORM_EDIT = id => {
   return `${IP_ADDRESS}/api/member/mbr/${id}/update/`
 }
 
-const PAY_LIST = `${IP_ADDRESS}/api/financial/` // 获取缴费数据
+const PAY_LIST_Inc = `${IP_ADDRESS}/api/financial/inc/` // 获取理事会员缴费数据
 
-const PAY_FEE = id => { // 缴费，更新订单
-  return `${IP_ADDRESS}/api/financial/${id}/`
+const PAY_LIST_Member = `${IP_ADDRESS}/api/financial/mbr/`  // 获取普通/高级会员缴费数据
+
+
+const PAY_FEE_Inc = id => { // 理事会员缴费，更新订单
+  return `${IP_ADDRESS}/api/financial/inc/${id}/`
+}
+
+const PAY_FEE_Member = id => { // 理事会员缴费，更新订单
+  return `${IP_ADDRESS}/api/financial/mbr/${id}/`
 }
 
 const PAY_DENY_Inc = id => {  // 付款审核否决-理事会员
@@ -85,10 +92,48 @@ const ACTIVITY_PERCEPTION = id => { // 提交活动感悟
   return `${IP_ADDRESS}/api/record/dir/${id}/`
 }
 
+const IS_USER = `${IP_ADDRESS}/api/member/find/is_user/`
+
+// 提示信息
+
+const USER_IDENTITY_STATUS = {
+  1001: '普通会员',
+  1002: '高级会员',
+  1003: '理事单位会员'
+}
+
+const NORMAL_MEMBER = 1001
+const SENIOR_MEMBER = 1002
+const COUNCIL_MEMBER = 1003
+
+const MEMBER_APPLY_STATUS = {
+  2000: '已注册，未提交申请',
+  2001: '申请审核中',
+  2002: '申请驳回',
+  2003: '审核通过，等待缴费',
+  2004: '缴费校验中',
+  2005: '缴费效验不通过，请重新确认',
+  2006: '已成为正式会员'
+}
+
+const ORDER_STATUS = {
+  3000: '未缴费',
+  3001: '用户已缴费，等待审核',
+  3002: '审核不通过',
+  3003: '缴费审核通过'
+}
+
+const ACTIVITY_APPLY_STATUS = {
+  4000: '等待管理员处理申请',
+  4001: '申请通过',
+  4002: '申请拒绝'
+}
+
 export {
     SIGN_UP
   , SIGN_IN
   , AVATAR
+  , IS_USER
   , USER_IDENTIFY
   , USER_INFO_MODIFY
   , COMMON_WORK_FORM
@@ -101,8 +146,10 @@ export {
   , APPLY_FORM_DENY_Member
   , APPLY_FORM_PASS_Member
   , APPLY_FORM_EDIT
-  , PAY_LIST
-  , PAY_FEE
+  , PAY_LIST_Inc
+  , PAY_LIST_Member
+  , PAY_FEE_Inc
+  , PAY_FEE_Member
   , PAY_DENY_Inc
   , PAY_PASS_Inc
   , PAY_DENY_Member
@@ -112,4 +159,11 @@ export {
   , CANCEL_ACTIVITY_APPLY
   , ACTIVITY_FOOTPRINT
   , ACTIVITY_PERCEPTION
+  , USER_IDENTITY_STATUS
+  , MEMBER_APPLY_STATUS
+  , ORDER_STATUS
+  , ACTIVITY_APPLY_STATUS
+  , NORMAL_MEMBER
+  , SENIOR_MEMBER
+  , COUNCIL_MEMBER
 }

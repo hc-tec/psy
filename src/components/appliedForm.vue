@@ -27,17 +27,14 @@
       </el-table-column>
 
       <el-table-column
-        prop="appliedTime"
-        label="申请发起日期"
-        width="300px">
-
-      </el-table-column>
-
-      <el-table-column
         label="操作"
         fixed="right">
         <template slot-scope="scope">
-          <el-button @click="editForm(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button
+            :disabled="2002 !== parseInt(scope.row.mbse_status)"
+            @click="editForm(scope.row)"
+            type="text"
+            size="small">编辑</el-button>
         </template>
       </el-table-column>
 
@@ -64,7 +61,7 @@
 <script>
 import { Table, TableColumn, Button, Dialog } from 'element-ui'
 import { ajaxGet } from '../element-wrapper'
-import { COMMON_WORK_FORM, INC_WORK_FORM } from '../api'
+import { COMMON_WORK_FORM, INC_WORK_FORM, USER_IDENTITY_STATUS, MEMBER_APPLY_STATUS, COUNCIL_MEMBER, NORMAL_MEMBER } from '../api'
 import { genericError } from '../func'
 export default {
   components: {
@@ -106,7 +103,7 @@ export default {
           method: this.chooseApplyType
         }
       ],
-      director: this.global.memberInfo.identity === '3',
+      director: parseInt(this.global.memberInfo.identity) === COUNCIL_MEMBER,
       // dialogBtn: false
     }
   },
@@ -129,8 +126,8 @@ export default {
         let index = 0;
         for(let el of res.data.data) {
           this.appliedFormData.push({
-            mbr_type: ['申请人', '普通会员', '高级会员', '理事单位'][this.global.memberInfo.identity],
-            mbse_status: ['已注册，未提交申请', '申请正在审核中', '审核驳回，请检查申请信息', '审核通过，等待缴费', '缴费效验中', '缴费效验不通过，请重新确认', '缴费验证通过，已成为正式会员'][parseInt(this.global.formalMemberInfo.mbse_status)],
+            mbr_type: USER_IDENTITY_STATUS[this.global.memberInfo.identity],
+            mbse_status: MEMBER_APPLY_STATUS[parseInt(el.mbse_status)],
             index,
           })
           index++;
@@ -138,7 +135,7 @@ export default {
       }
     },
     editForm(row) {
-      const form = this.getApplyForm(this.global.memberInfo.identity-1)
+      const form = this.getApplyForm(this.global.memberInfo.identity-NORMAL_MEMBER)
       this.global.editForm = this.global.applyForms[row.index];
       if(!this.director) {
         this.global.editForm.mbr_training_date = [this.global.editForm.mbr_training_date.split('~')[0], this.global.editForm.mbr_training_date.split('~')[1]]
@@ -156,7 +153,7 @@ export default {
       // 清楚中间量
       this.global.editForm = {}
 
-      const form = this.getApplyForm(this.global.memberInfo.identity-1)
+      const form = this.getApplyForm(this.global.memberInfo.identity-NORMAL_MEMBER)
       // this.showApplyBtn = false
       this.$router.push(`/memberService/apply/${form}`)
     }

@@ -2,15 +2,12 @@
   <div class="normalForm">
     <apply-form
       applyFormTitle="江西省心理咨询师协会普通会员登记表"
-      @submitApplyForm="submitApplyForm($event)" />
+       />
   </div>
 </template>
 
 <script>
 import applyForm from './applyForm'
-import { ajaxPost, ajaxPatch } from '../element-wrapper'
-import { COMMON_WORK_FORM, APPLY_COMMON_WORK_FORM_MODIFY } from '../api'
-import { genericError } from '../func'
 export default {
   components: {
     'apply-form': applyForm
@@ -21,30 +18,7 @@ export default {
     }
   },
   methods: {
-    submitApplyForm(applyFormData) {
-      console.log(applyFormData)
-      applyFormData.mbse_user = this.global.memberInfo.userid;
 
-      if(typeof this.global.editForm.id === 'number') {
-        ajaxPatch(
-          APPLY_COMMON_WORK_FORM_MODIFY(this.global.memberInfo.userid), applyFormData,
-          this.getApplyFormResponse, genericError
-        )
-      }
-      else {
-        ajaxPost(
-          COMMON_WORK_FORM, applyFormData,
-          this.getApplyFormResponse, genericError
-        )
-      }
-    },
-    getApplyFormResponse(res) {
-      if(parseInt(res.data.code) === 201) {
-        elmessage('提交成功', 'success');
-        this.$router.push('/memberService/apply/chooseApplyForm/');
-      }
-      console.log(res)
-    }
   }
 }
 </script>

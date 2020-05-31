@@ -151,7 +151,7 @@ const routes = [
     name: 'search',
     meta: { index: 100 },
     components: {
-      default: () => import(/* webpackChunkName: "search" */ '../components/search')
+      default: () => import(/* webpackChunkName: "search" */ '../views/search')
     }
   },
   {

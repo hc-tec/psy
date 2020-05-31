@@ -81,7 +81,8 @@ const ajaxPatch = (url, params = {}, resolve, reject, args) => {
 }
 
 const ajaxDel = (url, params = {}, resolve, reject) => {
-  axios.delete(url, { params: params })
+  console.log(params)
+  axios.delete(url, {params: params})
     .then(response => resolve(response))
     .catch(e => reject(e))
 }

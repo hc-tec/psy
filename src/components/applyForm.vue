@@ -24,10 +24,11 @@
             action="fake-action"
             accept="image/jpeg,image/gif,image/png,image/bmp"
             :show-file-list="false"
-            :http-request="ImgUpload">
+            :http-request="imgSave">
             <img v-if="applyFormData.mbr_avatar" :src="applyFormData.mbr_avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
+          <p v-if="img_file">图片已上传</p>
         </td>
       </tr>
 
@@ -164,7 +165,6 @@
 
     </table>
     <div class="work-btn">
-      <el-button type="success">保存</el-button>
       <el-button type="primary" @click="submitApplyForm">提交</el-button>
     </div>
   </div>
@@ -172,9 +172,9 @@
 
 <script>
 import { Input, Select, Option, DatePicker, Upload, Button } from 'element-ui'
-import { elconfirm, ajaxPost } from '../element-wrapper'
+import { elconfirm, ajaxPost, ajaxPatch, elmessage } from '../element-wrapper'
 import { getTimeStr, genericError } from '../func'
-import { AVATAR } from '../api'
+import { AVATAR, APPLY_COMMON_WORK_FORM_MODIFY, COMMON_WORK_FORM } from '../api'
 import Axios from 'axios'
 export default {
   props: {
@@ -233,6 +233,7 @@ export default {
         mbse_judge: '',
         mbse_code: 'sdfsdf'
       },
+      img_file: null
     }
   },
   methods: {
@@ -256,25 +257,56 @@ export default {
       this.applyFormData.mbr_graduate_time = getTimeStr(this.applyFormData.mbr_graduate_time, 'day');
       this.applyFormData.mbr_training_date = `${getTimeStr(this.applyFormData.mbr_training_date[0], 'day')} ~ ${getTimeStr(this.applyFormData.mbr_training_date[1], 'day')}`;
       this.applyFormData.mbr_cert_date = getTimeStr(this.applyFormData.mbr_cert_date, 'year');
-      this.$emit('submitApplyForm', this.applyFormData)
+      delete this.applyFormData.mbr_avatar;
+      this._submitApplyForm(this.applyFormData);
     },
-    ImgUpload(params) {
+    imgSave(img) {
+      this.img_file = img;
+    },
+    ImgUpload(params, id) {
       const file = params.file;
       const satisfy = this.beforeAvatarUpload(file);
       if(satisfy) {
         const file_form = new FormData();
         // 文件对象
         file_form.append('mbr_avatar', file);
-        file_form.append('id', this.global.memberInfo.userid);
+        file_form.append('id', id);
         const config = {
           headers: {'Content-Type': 'multypart/form-data'}
         };
         Axios.post(
-          AVATAR(this.global.memberInfo.userid), file_form, config)
+          AVATAR(id), file_form, config)
           .then(res => {
             this.handleAvatarSuccess(res)
           })
       }
+    },
+    _submitApplyForm(applyFormData) {
+      console.log(applyFormData)
+      applyFormData.mbse_user = this.global.memberInfo.userid;
+
+      if(typeof this.global.editForm.id === 'number') {
+        ajaxPatch(
+          APPLY_COMMON_WORK_FORM_MODIFY(this.global.editForm.id), applyFormData,
+          this.getApplyFormResponse, genericError
+        )
+      }
+      else {
+        ajaxPost(
+          COMMON_WORK_FORM, applyFormData,
+          this.getApplyFormResponse, genericError
+        )
+      }
+    },
+    getApplyFormResponse(res) {
+      if(parseInt(res.data.code) === 201) {
+        if(this.img_file){
+          this.ImgUpload(this.img_file, res.data.data.id);
+        }
+        elmessage('提交成功', 'success');
+        this.$router.push('/memberService/apply/chooseApplyForm/');
+      }
+      console.log(res)
     }
   },
 }

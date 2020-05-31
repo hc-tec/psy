@@ -123,7 +123,6 @@
       </table>
     </div>
     <div class="work-btn">
-      <el-button type="success">保存</el-button>
       <el-button type="primary" @click="submitApplyForm">提交</el-button>
     </div>
   </div>
@@ -169,7 +168,7 @@ export default {
 
       if(typeof this.global.editForm.id === 'number' || this.global.applyForms.length >= 1) {
         ajaxPut(
-          APPLY_ICN_WORK_FORM_MODIFY(this.global.memberInfo.userid), applyFormData,
+          APPLY_ICN_WORK_FORM_MODIFY(this.global.editForm.id), applyFormData,
           this.getApplyFormResponse, genericError
         )
       } else {

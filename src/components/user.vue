@@ -35,6 +35,13 @@ export default {
     },
     confirmExit () {
       delCookie('token');
+      // 清理所有全局变量
+      this.global.memberInfo = {};
+      this.global.isSighUpPage = false;
+      this.global.formalMemberInfo = {};
+      this.global.applyForms = [];
+      this.global.editForm = {};
+      this.global.payListData = [];
       this.$router.push('/login');
       elmessage('成功退出系统', 'warning');
     },
@@ -54,7 +61,7 @@ export default {
 <style>
 #user-operation {
   margin-left: 219px;
-  padding-left: 600px;
+  padding-left: 20px;
   display: flex;
   height: 69px;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);

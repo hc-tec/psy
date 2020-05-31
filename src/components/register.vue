@@ -50,7 +50,7 @@
             <el-radio-group v-model="register_info.identity">
               <el-radio-button label="普通会员" ></el-radio-button>
               <el-radio-button label="高级会员"></el-radio-button>
-              <el-radio-button label="理事会员"></el-radio-button>
+              <el-radio-button label="理事单位会员"></el-radio-button>
             </el-radio-group>
           </el-form-item>
           <!-- <el-form-item label="验证码:" prop="verify_code">
@@ -113,7 +113,7 @@ export default {
   data () {
     return {
       phone_verify_on: true,
-      hasReadDoc: false,
+      hasReadDoc: '0',
       register_info: {
         username: 'test',
         password: 'sun19961203',
@@ -169,15 +169,15 @@ export default {
   },
   methods: {
     initRegister () {
-      if (this.hasReadDoc &&
+      if (this.hasReadDoc === '1' &&
         validValue(this.register_info) &&
         this.register_info.password === this.register_info.sure_pawd
       ) {
         const identity_code = identity => {
           return {
-            普通会员: 1,
-            高级会员: 2,
-            理事会员: 3
+            普通会员: 1001,
+            高级会员: 1002,
+            理事单位会员: 1003
           }[identity]
         }
         this.register_info.identity = identity_code(this.register_info.identity);

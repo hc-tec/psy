@@ -5,7 +5,12 @@
         :tableData="details"
       />
       <div class="activity-operate-btn">
-        <el-button type="primary" @click="initSignUp">报名</el-button>
+        <el-button
+          type="primary"
+          @click="initSignUp"
+          :disabled="this.global.activityDetails.audit_status === '申请通过'">
+          {{ this.global.activityDetails.audit_status === '申请通过' ? '已报名' : '报名' }}
+        </el-button>
       </div>
     </div>
   </div>
@@ -33,7 +38,7 @@ export default {
           活动方式: this.global.activityDetails.act_method,
           活动描述: this.global.activityDetails.act_description,
           是否结束: this.global.activityDetails.act_is_available === false ? '否' : '是',
-          是否需要审核: this.global.activityDetails.act_need_audit === false ? '无需审核' : '需要审核'
+          是否需要审核: this.global.activityDetails.act_need_audit === false ? '无需审核' : '需要审核',
         }
       },
       act_need_audit: false,

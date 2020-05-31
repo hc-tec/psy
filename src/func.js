@@ -1,3 +1,11 @@
+
+
+const pay_status = [
+    '审核通过，等待缴费', '缴费效验中',
+    '缴费效验不通过，请重新确认', '缴费效验通过，已成为正式会员'
+]
+
+
 const postDataFormat = data => {
   let dataString = ''
   const keys = Object.keys(data)
@@ -106,4 +114,5 @@ export {
   , delCookie
   , validValue
   , getTimeStr
+  , pay_status
 }

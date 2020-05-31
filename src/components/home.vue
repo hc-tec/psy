@@ -3,7 +3,7 @@
     <div>
       <two-column-table
         class="member-info-table"
-        :tableData="memberInfo"
+        :tableData="userInfo"
       />
       <p class="member-info">说明</p>
     </div>
@@ -15,7 +15,7 @@ import { Table, TableColumn } from 'element-ui'
 import twoColumnTable from './two-column-table'
 import { ajaxGet } from '../element-wrapper'
 import { genericError } from '../func'
-import { MEMBER_INFO, INC_WORK_FORM } from '../api'
+import { MEMBER_INFO, INC_WORK_FORM, USER_IDENTITY_STATUS, MEMBER_APPLY_STATUS, ORDER_STATUS } from '../api'
 export default {
 
   components: {
@@ -25,18 +25,18 @@ export default {
   },
   data () {
     return {
-
-      memberInfo: {
+      valid: this.global.applyForms.length !== 0,
+      userInfo: {
         head: '会员信息',
         body: {
-          会员类型: ['申请人', '普通会员', '高级会员', '理事单位'][this.global.memberInfo.identity],
-          状态: ['已注册，未提交申请', '申请正在审核中', '审核驳回，请检查申请信息', '审核通过，等待缴费', '缴费效验中', '缴费效验不通过，请重新确认', '缴费验证通过，已成为正式会员'][parseInt(this.global.formalMemberInfo.mbse_status)] ||
-                '暂未成为正式会员',
-          会员编码: this.global.formalMemberInfo.mbse_code ||
-                   '暂未成为正式会员',
-          有效期: this.global.formalMemberInfo.mbse_exp ||
-                 '暂未成为正式会员',
-          缴费情况: '暂未成为正式会员',
+          选择申请的会员类型: this.global.memberInfo ? USER_IDENTITY_STATUS[parseInt(this.global.memberInfo.identity)] : '加载中',
+          状态: this.valid ? MEMBER_APPLY_STATUS[parseInt(this.global.applyForms[0].mbse_status)] : MEMBER_APPLY_STATUS[parseInt(this.global.formalMemberInfo.mbse_status)] ||
+                '申请人',
+          会员编码: this.valid ? this.global.applyForms[0].mbse_code : this.global.formalMemberInfo.mbse_code ||
+                   '',
+          有效期: this.valid ? this.global.applyForms[0].mbse_exp : this.global.formalMemberInfo.mbse_exp ||
+                 '',
+          缴费情况: this.global.payListData.length !== 0 ? this.global.payListData[0].status : '暂未成为正式会员',
         }
       }
     }

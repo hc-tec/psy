@@ -13,7 +13,7 @@ import user from '../components/user'
 import controlNav from '../components/nav'
 import { getCookie, genericError } from '../func'
 import { elmessage, ajaxGet } from '../element-wrapper'
-import { COMMON_WORK_FORM, INC_WORK_FORM } from '../api'
+import { COMMON_WORK_FORM, INC_WORK_FORM, PAY_LIST_Inc, PAY_LIST_Member, COUNCIL_MEMBER, ORDER_STATUS } from '../api'
 export default {
   components: {
     'control-nav': controlNav,
@@ -36,7 +36,7 @@ export default {
   methods: {
     initGetMemberInfo() {
       let url;
-      if(this.global.memberInfo.identity === 3)
+      if(parseInt(this.global.memberInfo.identity) === COUNCIL_MEMBER)
         url = INC_WORK_FORM
       else
         url = COMMON_WORK_FORM
@@ -48,10 +48,31 @@ export default {
     getMemberInfoResponse(res) {
       if(parseInt(res.data.code) === 200) {
         const flag = res.data.data.length !== 0;
+        this.global.applyForms = res.data.data;
         if(flag)
           this.global.formalMemberInfo = res.data.data[0]
         else
           this.global.formalMemberInfo = [];
+      }
+    },
+    initGetBill () {
+      let url;
+      if(parseInt(this.global.memberInfo.identity) === COUNCIL_MEMBER) {
+        url = PAY_LIST_Inc;
+      } else {
+        url = PAY_LIST_Member;
+      }
+      ajaxGet(
+        url, {},
+        this.getBillResponse, genericError
+      )
+    },
+    getBillResponse (res) {
+      if (parseInt(res.data.code) === 200) {
+        for(let data of res.data.data) {
+          data.status = ORDER_STATUS[data.status];
+        }
+        this.global.payListData = res.data.data;
       }
     }
   },
@@ -62,9 +83,15 @@ export default {
         this.$router.push('/login')
       }, 1000)
     } else {
-      this.initGetMemberInfo()
+      this.initGetMemberInfo();
+      this.initGetBill();
     }
   },
+  mounted() {
+    if(!this.global.memberInfo || !this.global.memberInfo.userid) {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 

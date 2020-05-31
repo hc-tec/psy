@@ -19,12 +19,15 @@ export default {
   memberInfo: {},
 
   // 会员信息
-  formalMemberInfo: [],
+  formalMemberInfo: {},
 
   // 申请表汇总
   applyForms: [],
 
   // 编辑申请表前的信息储存
   editForm: {},
+
+  // 缴费信息表
+  payListData: []
 
 }

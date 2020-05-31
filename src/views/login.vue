@@ -1,5 +1,6 @@
 <template>
   <div id="login-page">
+    <el-button type="warning" style="position:absolute;right:10px;top:-50px" @click="search">会员查询</el-button>
     <el-image :src="logo" class="logo">
     </el-image>
     <div class="regis">
@@ -40,12 +41,16 @@ export default {
     regis () {
       this.$router.push('/register')
     },
+    search()  {
+      this.$router.push('/search')
+    },
     initLogin (loginInfo) {
       ajaxPost(
         SIGN_IN, loginInfo,
         this.succLogin, this.failLogin
       )
     },
+
 
     succLogin (res) {
       console.log(res)

@@ -22,13 +22,6 @@
         <el-input v-model="passwordModifyForm.phone" />
       </el-form-item>
 
-      <el-form-item label="会员类型" prop="identity">
-        <el-radio-group v-model="passwordModifyForm.identity">
-          <el-radio-button label="普通会员" ></el-radio-button>
-          <el-radio-button label="高级会员"></el-radio-button>
-          <el-radio-button label="理事会员"></el-radio-button>
-        </el-radio-group>
-      </el-form-item>
 
     </el-form>
     <div class="modify-btn">
@@ -42,7 +35,7 @@
 </template>
 
 <script>
-import { Button, Input, Form, FormItem, RadioGroup, RadioButton } from 'element-ui'
+import { Button, Input, Form, FormItem } from 'element-ui'
 import { validValue, genericError } from '../func'
 import { elmessage, ajaxPost } from '../element-wrapper'
 import { USER_INFO_MODIFY } from '../api'
@@ -52,8 +45,6 @@ export default {
     'el-input': Input,
     'el-form': Form,
     'el-form-item': FormItem,
-    'el-radio-group': RadioGroup,
-    'el-radio-button': RadioButton
   },
   data () {
     return {
@@ -62,7 +53,7 @@ export default {
         password: '',
         sureNewPassword: '',
         phone: '',
-        identity: '普通会员'
+        identity: this.global.memberInfo.identity,
       },
       rules: {
         username: [
@@ -100,14 +91,6 @@ export default {
   },
   methods: {
     update () {
-      const identity_code = identity => {
-        return {
-          普通会员: 1,
-          高级会员: 2,
-          理事会员: 3
-        }[identity]
-      }
-      this.passwordModifyForm.identity = identity_code(this.passwordModifyForm.identity);
       if (validValue(this.passwordModifyForm) &&
         this.passwordModifyForm.password === this.passwordModifyForm.sureNewPassword
       ) {
@@ -117,7 +100,6 @@ export default {
           this.updateResponse, genericError
         )
       } else {
-        this.passwordModifyForm.identity = '普通会员';
         elmessage('信息不能为空或前后密码不一致', 'error');
       }
     },

@@ -1,6 +1,6 @@
 <template>
   <div id="success">
-    <img :src="logo" style="margin: 10px 0 0 100px" />
+    <img :src="logo" style="margin: 10px 0 0 100px" width="200" height="180" />
     <el-divider></el-divider>
     <div id="success-content">
       <div class="success-info">

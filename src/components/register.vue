@@ -10,9 +10,9 @@
           :model="register_info"
           label-width="100px">
 
-          <el-form-item label="真实姓名:" prop="username">
+          <el-form-item label="用户名:" prop="username">
             <el-input
-              placeholder="请输入您的姓名"
+              placeholder="请输入用户名"
               v-model="register_info.username">
             </el-input>
           </el-form-item>
@@ -76,7 +76,7 @@
         <el-radio
           label="1"
           v-model="hasReadDoc" >
-          我已阅读中国心理学会会员条例，并遵守相关规定。
+          我已阅读江西省心理咨询师协会会员条例，并遵守相关规定。
         </el-radio>
         <br />
         <el-button
@@ -113,13 +113,13 @@ export default {
   data () {
     return {
       phone_verify_on: true,
-      hasReadDoc: '0',
+      hasReadDoc: '1',
       register_info: {
-        username: 'test',
-        password: 'sun19961203',
-        sure_pawd: 'sun19961203',
-        phone: '13177666570',
-        identity: '普通会员'
+        username: '',
+        password: '',
+        sure_pawd: '',
+        phone: '',
+        identity: ''
       },
       regis_rules: {
         username: [
@@ -192,7 +192,7 @@ export default {
       }
     },
     succRegister (res) {
-      console.log(res.data)
+      // console.log(res.data)
       if (parseInt(res.data.code) === 201) {
         this.$router.push('/success')
       } else {

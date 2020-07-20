@@ -1,7 +1,7 @@
 <template>
   <div id="login-page">
     <el-button type="warning" style="position:absolute;right:10px;top:-50px" @click="search">会员查询</el-button>
-    <el-image :src="logo" class="logo">
+    <el-image :src="logo" class="logo" style="width:100px;">
     </el-image>
     <div class="regis">
       <p>想获得更多心理学相关资讯</p>
@@ -16,6 +16,7 @@
       id="login"
       @submit="initLogin">
     </login>
+    <footage id="footage" />
   </div>
 </template>
 
@@ -25,10 +26,12 @@ import { Button, Image } from 'element-ui'
 import { ajaxPost, elmessage, axios } from '../element-wrapper'
 import { SIGN_IN } from '../api'
 import { setCookie, getCookie, delCookie } from '../func'
+import footage from '../components/footage'
 export default {
   name: 'login-regis',
   components: {
     login,
+    footage,
     'el-image': Image,
     'el-button': Button
   },
@@ -53,7 +56,7 @@ export default {
 
 
     succLogin (res) {
-      console.log(res)
+      // console.log(res)
       if (parseInt(res.data.code) === 200) {
         // 保存 token 到 cookie 中，时长为半小时
         setCookie('token', res.data.data.token, 1000 * 60 * 30)
@@ -121,5 +124,11 @@ export default {
 .logo {
   position: absolute;
   top: -100px;
+}
+#footage {
+  position: absolute;
+  bottom: -150px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>

@@ -1,7 +1,115 @@
 <template>
   <div class="seniorForm">
     <div class="Form">
-      <table cellspacing="0" align="center" border="0">
+
+      <table cellspacing="0" align="center" border="0" style="line-height: 3;" v-if="this.global.applylFormStatus === 'view'">
+
+        <tr>
+          <th colspan="4">江西省心理咨询师协会理事单位申请登记表</th>
+        </tr>
+
+        <tr>
+          <td>单位全称</td>
+          <td colspan="4">
+            {{ applyFormData.mbse_name }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>所在地区及办公地址</td>
+          <td>
+            {{ applyFormData.inc_loc }}
+          </td>
+          <td>邮编</td>
+          <td>
+            {{ applyFormData.inc_code }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>电话</td>
+          <td>
+            {{ applyFormData.inc_phone }}
+          </td>
+          <td>传真</td>
+          <td>
+            {{ applyFormData.inc_fax }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>电子邮箱</td>
+          <td>
+            {{ applyFormData.inc_email }}
+          </td>
+          <td>网址</td>
+          <td>
+            {{ applyFormData.inc_site }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>主管机关</td>
+          <td>
+            {{ applyFormData.inc_charge }}
+          </td>
+          <td>组织机构代码</td>
+          <td>
+            {{ applyFormData.inc_charge_code }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>法定代表</td>
+          <td>
+            {{ applyFormData.inc_corporate }}
+          </td>
+          <td>法人代表联系方式</td>
+          <td>
+            {{ applyFormData.inc_corp_phone }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>推举理事</td>
+          <td>
+            {{ applyFormData.inc_director }}
+          </td>
+          <td>理事手机</td>
+          <td>
+            {{ applyFormData.inc_director_phone }}
+          </td>
+        </tr>
+
+        <tr>
+          <td rowspan="3">申请理事单位负责人意见</td>
+          <td rowspan="3" colspan="3">
+            {{ applyFormData.inc_opinion }}
+          </td>
+        </tr>
+
+        <tr></tr>
+        <tr></tr>
+
+        <tr>
+          <td>协会审批</td>
+          <td rowspan="3" colspan="3">
+            {{ applyFormData.mbse_judge }}
+          </td>
+        </tr>
+
+        <tr></tr>
+        <tr></tr>
+
+        <tr>
+          <td rowspan="3">备注</td>
+          <td rowspan="3" colspan="3">
+            {{ applyFormData.inc_info }}
+          </td>
+        </tr>
+
+      </table>
+      <table cellspacing="0" align="center" border="0" v-else>
 
         <tr>
           <th colspan="4">江西省心理咨询师协会理事单位申请登记表</th>
@@ -123,7 +231,7 @@
       </table>
     </div>
     <div class="work-btn">
-      <el-button type="primary" @click="submitApplyForm">提交</el-button>
+      <el-button type="primary" @click="submitApplyForm" v-if="this.global.applylFormStatus !== 'view'">提交</el-button>
     </div>
   </div>
 </template>
@@ -142,22 +250,22 @@ export default {
   data () {
     return {
       applyFormData: Object.keys(this.global.editForm).length > 0 ? this.global.editForm : {
-        mbse_name: 'as',
-        inc_loc: 'asa',
-        inc_code: 'as',
-        inc_phone: 'as',
-        inc_fax: 'as',
-        inc_email: 'as',
-        inc_site: 'as',
-        inc_charge: 'as',
-        inc_charge_code: 'fds',
-        inc_corporate: 'sdfsd',
-        inc_corp_phone: 'sdf',
-        inc_director: 'sdf',
-        inc_director_phone: 'asd',
-        inc_opinion: 'as',
+        mbse_name: '',
+        inc_loc: '',
+        inc_code: '',
+        inc_phone: '',
+        inc_fax: '',
+        inc_email: '',
+        inc_site: '',
+        inc_charge: '',
+        inc_charge_code: '',
+        inc_corporate: '',
+        inc_corp_phone: '',
+        inc_director: '',
+        inc_director_phone: '',
+        inc_opinion: '',
         mbse_judge: '',
-        inc_info: 'as'
+        inc_info: ''
       }
     }
   },
@@ -183,11 +291,11 @@ export default {
         elmessage('提交成功', 'success');
         this.$router.push('/memberService/apply/chooseApplyForm/');
       }
-      console.log(res)
+      // console.log(res)
     }
   },
   mounted() {
-    console.log(this.global.editForm)
+    // console.log(this.global.editForm)
   }
 }
 </script>

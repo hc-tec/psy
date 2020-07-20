@@ -1,6 +1,6 @@
 <template>
   <div id="register">
-    <img :src="logo" />
+    <img :src="logo"  style="width:120px;" />
     <regis class="register"></regis>
   </div>
 </template>

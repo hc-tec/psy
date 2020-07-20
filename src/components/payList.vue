@@ -59,7 +59,7 @@
         :visible.sync="payQRCode">
         <div class="QRImg-content">
           <p v-if="payQRCodeObj[index].way === payQRCodeObj[2].way">请向下方银行号码转账，完成缴费</p>
-          <p v-if="payQRCodeObj[index].way === payQRCodeObj[2].way">{{ bank_card }}</p>
+          <p v-if="payQRCodeObj[index].way === payQRCodeObj[2].way" class="band-card">{{ bank_card }}</p>
           <div
             class="QRImg">
             <img :src="payQRCodeObj[index].img" v-if="payQRCodeObj[index].way !== payQRCodeObj[2].way" />
@@ -102,7 +102,7 @@ export default {
   },
   data () {
     return {
-      bank_card: 19824923423,
+      bank_card: '1502 2094 0902 4598 792',
       payQRCode: false, // 二维码对话框开关
       payMethodAc: false, // 付款方式对话框开关
       index: 0, // 选择的付款方式索引
@@ -115,7 +115,7 @@ export default {
         },
         {
           way: '微信',
-          img: '/img/浑天刷.jpg',
+          img: '/img/pay-weixin.png',
           bgc: '#22ab38'
         },
         {
@@ -187,7 +187,7 @@ export default {
         url(this.order_id), data,
         this.getPayResponse, genericError,
       )
-      console.log('已付款')
+      // console.log('已付款')
     },
     getPayResponse(res) {
       if(parseInt(res.data.code) === 201) {
@@ -264,5 +264,9 @@ export default {
 .apply-btn-2 {
   display: flex;
   justify-content: center;
+}
+.band-card {
+  font-weight: bold;
+  font-size: 2em;
 }
 </style>

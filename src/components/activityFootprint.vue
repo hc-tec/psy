@@ -164,6 +164,11 @@ export default {
   width: 600px;
   margin: 0 auto;
 }
+#finished-activity .el-tabs__header {
+  max-height: 550px;
+  overflow-y: auto;
+  min-width: 140px;
+}
 .finished-activity-info .el-input {
   min-width: 200px;
   max-width: 90%;
@@ -173,6 +178,12 @@ export default {
   border-collapse: collapse;
   background: #fff;
   margin-bottom: 20px;
+}
+.finished-activity-info table tr {
+  transition: background-color .3s;
+}
+.finished-activity-info table tr:hover {
+  background-color: rgb(245,247,250);
 }
 .finished-activity-info table tr > td:nth-of-type(odd) {
   font-size: 14px;
@@ -188,6 +199,7 @@ export default {
   border: 1px solid #cfd3d5;
   padding: 8px 10px 8px 15px !important;
 }
+
 .activity-summary-btn {
   width: 20%;
   margin: 0 40%;

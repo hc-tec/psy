@@ -1,6 +1,143 @@
 <template>
   <div class="Form">
-    <table cellspacing="0" align="center" border="0">
+    <table cellspacing="0" align="center" border="0" style="line-height: 3;" v-if="this.global.applylFormStatus === 'view'">
+
+      <tr>
+        <th colspan="8">{{ applyFormTitle }}</th>
+      </tr>
+
+      <tr>
+        <td>姓名</td>
+        <td>
+          {{ applyFormData.mbse_name }}
+        </td>
+        <td>性别</td>
+        <td>
+          {{ applyFormData.mbr_gender }}
+        </td>
+        <td rowspan="3" class="avatar-content">
+          <el-upload
+            class="avatar-uploader"
+            action="fake-action"
+            accept="image/jpeg,image/gif,image/png,image/bmp"
+            :show-file-list="false"
+            style="pointer-events: none;"
+            >
+            <img v-if="applyFormData.mbr_avatar" :src="applyFormData.mbr_avatar" class="avatar">
+            <i v-else class="avatar-uploader-icon"></i>
+          </el-upload>
+        </td>
+      </tr>
+
+      <tr>
+        <td>出生年月</td>
+        <td>
+          {{ applyFormData.mbr_birth }}
+        </td>
+        <td>政治面貌</td>
+        <td>
+          {{ applyFormData.mbr_political }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>民族</td>
+        <td>
+          {{ applyFormData.mbr_folk }}
+        </td>
+        <td>技术职称</td>
+        <td>
+          {{ applyFormData.mbr_title }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>身份证号</td>
+        <td>
+          {{ applyFormData.mbr_id_num }}
+        </td>
+        <td>毕业院校及专业</td>
+        <td colspan="2">
+          {{ applyFormData.mbr_graduate }}
+        </td>
+      </tr>
+
+      <tr>
+
+        <td>毕业时间</td>
+        <td colspan="4">
+          {{ applyFormData.mbr_graduate_time }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>资格证培训机构</td>
+        <td>
+          {{ applyFormData.mbr_training_ins }}
+        </td>
+        <td>培训时间</td>
+        <td colspan="2">
+          {{ `${applyFormData.mbr_training_date[0]}~${applyFormData.mbr_training_date[1]}` }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>工作单位及职务</td>
+        <td colspan="6">
+          {{ applyFormData.mbr_job }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>通讯地址</td>
+        <td>
+          {{ applyFormData.mbr_loc }}
+        </td>
+        <td>邮政编码</td>
+        <td colspan="2">
+          {{ applyFormData.mbr_zip }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>Email</td>
+        <td>
+          {{ applyFormData.mbr_email }}
+        </td>
+        <td>手机</td>
+        <td colspan="2">
+          {{ applyFormData.mbr_phone }}
+        </td>
+
+      </tr>
+
+      <tr>
+        <td>心理咨询师级别</td>
+        <td>
+          {{ applyFormData.mbr_cert }}
+        </td>
+        <td>获证年份</td>
+        <td colspan="2">
+          {{ applyFormData.mbr_cert_date }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>证书编号</td>
+        <td colspan="4">
+          {{ applyFormData.mbr_cert_code }}
+        </td>
+      </tr>
+
+       <tr>
+        <td>协会审批意见</td>
+        <td colspan="4">
+          {{ applyFormData.mbse_judge }}
+        </td>
+      </tr>
+
+    </table>
+    <table cellspacing="0" align="center" border="0" v-else>
 
       <tr>
         <th colspan="8">{{ applyFormTitle }}</th>
@@ -164,8 +301,9 @@
       </tr>
 
     </table>
+
     <div class="work-btn">
-      <el-button type="primary" @click="submitApplyForm">提交</el-button>
+      <el-button type="primary" @click="submitApplyForm" v-if="this.global.applylFormStatus !== 'view'">提交</el-button>
     </div>
   </div>
 </template>
@@ -209,36 +347,36 @@ export default {
         '农工党党员', '致公党党员', '九三学社社员', '台盟盟员', '无党派人士', '群众'
       ],
       applyFormData: Object.keys(this.global.editForm).length > 0 ? this.global.editForm : {
-        mbse_name: 'asdas',
+        mbse_name: '',
         mbr_gender: '',
         mbr_birth: '',
         mbr_avatar: '',
         mbr_political: '',
         mbr_folk: '',
-        mbr_title: 'asd',
-        mbr_id_num: 'asas',
-        mbr_graduate: 'asa',
+        mbr_title: '',
+        mbr_id_num: '',
+        mbr_graduate: '',
         mbr_graduate_time: '',
-        mbr_training_ins: 'as',
+        mbr_training_ins: '',
         mbr_training_date: '',
-        mbr_job: 'asas',
-        mbr_loc: 'asa',
-        mbr_zip: 'a',
-        mbr_email: 'gdfg',
-        mbr_phone: 'asfhf',
-        mbr_cert: 'asffdsd',
+        mbr_job: '',
+        mbr_loc: '',
+        mbr_zip: '',
+        mbr_email: '',
+        mbr_phone: '',
+        mbr_cert: '',
         mbr_cert_date: '',
-        mbr_cert_code: 'dsgdq',
+        mbr_cert_code: '',
         mbr_achievement: [],
         mbse_judge: '',
-        mbse_code: 'sdfsdf'
+        mbse_code: ''
       },
       img_file: null
     }
   },
   methods: {
     handleAvatarSuccess(res) {
-      console.log(res);
+      // console.log(res);
     },
     beforeAvatarUpload(file) {
       const isJPG = ['image/jpeg', 'image/png', 'image/bmp'].indexOf(file.type) !== -1;
@@ -282,7 +420,7 @@ export default {
       }
     },
     _submitApplyForm(applyFormData) {
-      console.log(applyFormData)
+      // console.log(applyFormData)
       applyFormData.mbse_user = this.global.memberInfo.userid;
 
       if(typeof this.global.editForm.id === 'number') {
@@ -306,9 +444,13 @@ export default {
         elmessage('提交成功', 'success');
         this.$router.push('/memberService/apply/chooseApplyForm/');
       }
-      console.log(res)
+      // console.log(res)
     }
   },
+  beforeDestroy() {
+    this.global.applylFormStatus = '';
+    this.global.editForm = {}
+  }
 }
 </script>
 
@@ -340,6 +482,7 @@ export default {
 .Form table tr td {
   border: 1px solid #cfd3d5;
   padding: 8px 10px 8px 15px !important;
+
 }
 
 .work-btn {

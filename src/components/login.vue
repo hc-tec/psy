@@ -72,7 +72,7 @@
     <div>
       <el-input
         prefix-icon="el-icon-user"
-        placeholder="邮箱/手机号/会员编号"
+        placeholder="用户名"
         v-model="loginInfoV2.username"
         class="login-input">
       </el-input>
@@ -120,8 +120,8 @@ export default {
         phone: ''
       },
       loginInfoV2: {
-        username: 'titto2',
-        password: 'sun19961203..'
+        username: '',
+        password: ''
       }
     }
   },

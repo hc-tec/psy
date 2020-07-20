@@ -1,6 +1,6 @@
 <template>
   <div id="search">
-    <img :src="this.global.logo" style="position:absolute;top: 50px;left:150px" />
+    <img :src="this.global.logo" style="position:absolute;top: 50px;left:150px" width="150" />
     <h2>会员查询</h2>
     <search />
   </div>

@@ -8,8 +8,8 @@
         <el-button
           type="primary"
           @click="initSignUp"
-          :disabled="this.global.activityDetails.audit_status === '申请通过'">
-          {{ this.global.activityDetails.audit_status === '申请通过' ? '已报名' : '报名' }}
+          :disabled="this.global.activityDetails.audit_status === '申请通过' || this.global.activityDetails.act_is_available">
+          {{ this.global.activityDetails.audit_status === '申请通过' ? '已报名' : this.global.activityDetails.act_is_available ? '活动已结束' : '报名' }}
         </el-button>
       </div>
     </div>

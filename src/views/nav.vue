@@ -5,19 +5,22 @@
     <transition :name="transitionName">
       <router-view class="control-details"></router-view>
     </transition>
+    <footage style="margin-left: 240px;" />
   </div>
 </template>
 
 <script>
 import user from '../components/user'
 import controlNav from '../components/nav'
+import footage from '../components/footage'
 import { getCookie, genericError } from '../func'
 import { elmessage, ajaxGet } from '../element-wrapper'
 import { COMMON_WORK_FORM, INC_WORK_FORM, PAY_LIST_Inc, PAY_LIST_Member, COUNCIL_MEMBER, ORDER_STATUS } from '../api'
 export default {
   components: {
     'control-nav': controlNav,
-    user
+    user,
+    footage
   },
   data() {
     return {

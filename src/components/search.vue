@@ -34,9 +34,9 @@ export default {
   data(){
     return {
       search: {
-        'name': 'asdas',
-        'id': '362525200202034511',
-        'phone': 'asfhf'
+        'name': '',
+        'id': '',
+        'phone': ''
       }
     }
   },

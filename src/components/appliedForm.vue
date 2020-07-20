@@ -31,10 +31,20 @@
         fixed="right">
         <template slot-scope="scope">
           <el-button
-            :disabled="2002 !== parseInt(scope.row.mbse_status)"
-            @click="editForm(scope.row)"
+            :disabled="'申请驳回' !== scope.row.mbse_status"
+            @click="EditOrViewForm(scope.row, 'edit')"
             type="text"
-            size="small">编辑</el-button>
+            size="small">
+            编辑
+          </el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="EditOrViewForm(scope.row, 'view')"
+            v-if="2001 !== parseInt(scope.row.mbse_status)">
+            查看
+          </el-button>
+
         </template>
       </el-table-column>
 
@@ -126,7 +136,7 @@ export default {
         let index = 0;
         for(let el of res.data.data) {
           this.appliedFormData.push({
-            mbr_type: USER_IDENTITY_STATUS[this.global.memberInfo.identity],
+            mbr_type: USER_IDENTITY_STATUS[+this.global.memberInfo.identity],
             mbse_status: MEMBER_APPLY_STATUS[parseInt(el.mbse_status)],
             index,
           })
@@ -134,8 +144,9 @@ export default {
         }
       }
     },
-    editForm(row) {
-      const form = this.getApplyForm(this.global.memberInfo.identity-NORMAL_MEMBER)
+    EditOrViewForm(row, type) {
+      const form = this.getApplyForm(this.global.memberInfo.identity-NORMAL_MEMBER);
+      this.global.applylFormStatus = type;
       this.global.editForm = this.global.applyForms[row.index];
       if(!this.director) {
         this.global.editForm.mbr_training_date = [this.global.editForm.mbr_training_date.split('~')[0], this.global.editForm.mbr_training_date.split('~')[1]]
@@ -156,6 +167,9 @@ export default {
       const form = this.getApplyForm(this.global.memberInfo.identity-NORMAL_MEMBER)
       // this.showApplyBtn = false
       this.$router.push(`/memberService/apply/${form}`)
+    },
+    viewApplyForm(row) {
+      this.global.viewForm = row;
     }
   },
   created() {

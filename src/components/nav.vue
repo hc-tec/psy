@@ -1,7 +1,7 @@
 <template>
   <nav id="control-nav">
     <div class="menu-logo">
-      <img :src="logo" width="100%" />
+      <img src="/img/logo.png" height="100%" width="60%" />
     </div>
 
     <el-menu
@@ -49,7 +49,6 @@ export default {
   },
   data () {
     return {
-      logo: this.global.logo,
       menuItems: [
         {
           index: '/memberService/home',
@@ -103,7 +102,7 @@ export default {
 }
 .menu-logo {
   width: 219px;
-  height: 70px;
+  height: 130px;
   line-height: 65px;
   text-align: center;
   border-bottom: 1px dashed #fff;

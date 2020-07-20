@@ -28,6 +28,7 @@ export default {
 .two-column-table {
   width: 100%;
   margin-bottom: 20px;
+  border-collapse: collapse;
 }
 .two-column-table th {
   font-size: 1.4em;
@@ -47,13 +48,18 @@ export default {
 }
 .two-column-table > tr {
   line-height: 3;
+  transition: background-color .3s;
+}
+.two-column-table > tr:hover {
+  background-color: rgb(245,247,250);
 }
 .two-column-table > tr:nth-child(1) {
   box-shadow: none;
 }
+
 .two-column-table > tr > td {
   padding-left: 10px;
-  border-bottom: 1px solid hsla(0,0%,0%,0.12);
+  border: 1px solid hsla(0,0%,0%,0.12);
 }
 .two-column-table > tr > td:nth-child(1) {
   font-weight: bold;
